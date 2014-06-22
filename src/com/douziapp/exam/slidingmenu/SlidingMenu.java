@@ -20,6 +20,7 @@ import com.douziapp.exam.sipm.R;
 import android.app.Activity;
 import android.content.Context;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.Display;
 import android.view.MotionEvent;
 import android.view.VelocityTracker;
@@ -51,6 +52,10 @@ public class SlidingMenu extends RelativeLayout {
 	private boolean hasClickLeft = false;
 	private boolean hasClickRight = false;
 
+	private boolean isKnowLR = false;
+	
+	private boolean isInCenter = true;
+	
 	public SlidingMenu(Context context) {
 		super(context);
 		init(context);
@@ -152,7 +157,7 @@ public class SlidingMenu extends RelativeLayout {
 	}
 
 	private boolean canSlideLeft = false;
-	private boolean canSlideRight = true;
+	private boolean canSlideRight = false;
 
 	public void setCanSliding(boolean left, boolean right) {
 		canSlideLeft = left;
@@ -172,6 +177,7 @@ public class SlidingMenu extends RelativeLayout {
 			mLastMotionX = x;
 			mLastMotionY = y;
 			mIsBeingDragged = false;
+
 			if (canSlideLeft) {
 				mMenuView.setVisibility(View.VISIBLE);
 				mDetailView.setVisibility(View.INVISIBLE);
@@ -180,13 +186,44 @@ public class SlidingMenu extends RelativeLayout {
 				mMenuView.setVisibility(View.INVISIBLE);
 				mDetailView.setVisibility(View.VISIBLE);
 			}
+			
 			break;
 
 		case MotionEvent.ACTION_MOVE:
 			final float dx = x - mLastMotionX;
 			final float xDiff = Math.abs(dx);
 			final float yDiff = Math.abs(y - mLastMotionY);
+			
 			if (xDiff > mTouchSlop && xDiff > yDiff) {
+				
+				//{{
+				//wenbaolin add 智能识别是左滑还是右滑
+				//并且只有在未识别的时候并且未拖动的时候,并且主视图不在正中间的时候
+				if(!isKnowLR && !mIsBeingDragged && isInCenter ){
+					//Log.w("T", "know rl " + dx);
+					if(dx < 0){
+						setCanSliding(false,true);
+					}else{
+						setCanSliding(true,false);
+					}
+					
+					isKnowLR = true;
+					
+					if (canSlideLeft) {
+						mMenuView.setVisibility(View.VISIBLE);
+						mDetailView.setVisibility(View.INVISIBLE);
+					}
+					if (canSlideRight) {
+						mMenuView.setVisibility(View.INVISIBLE);
+						mDetailView.setVisibility(View.VISIBLE);
+					}
+				}else{
+					Log.w("T", "isKnowLR  " + isKnowLR + "||mIsBeingDragged " + mIsBeingDragged + "||isInCenter " + isInCenter);
+				}
+				//}}
+				
+				//Log.w("T", "canSlideLeft - " + canSlideLeft +" ||canSlideRight - " + canSlideRight);
+				
 				if (canSlideLeft) {
 					float oldScrollX = mSlidingView.getScrollX();
 					if (oldScrollX < 0) {
@@ -304,45 +341,60 @@ public class SlidingMenu extends RelativeLayout {
 				if (oldScrollX <= 0 && canSlideLeft) {// left view
 					if (xVelocity > VELOCITY) {
 						dx = -getMenuViewWidth() - oldScrollX;
+						
+						isInCenter = false;
 					} else if (xVelocity < -VELOCITY) {
 						dx = -oldScrollX;
 						if (hasClickLeft) {
 							hasClickLeft = false;
 							setCanSliding(tCanSlideLeft, tCanSlideRight);
 						}
+						
+						isInCenter = true;
 					} else if (oldScrollX < -getMenuViewWidth() / 2) {
 						dx = -getMenuViewWidth() - oldScrollX;
+						
+						isInCenter = false;
 					} else if (oldScrollX >= -getMenuViewWidth() / 2) {
 						dx = -oldScrollX;
 						if (hasClickLeft) {
 							hasClickLeft = false;
 							setCanSliding(tCanSlideLeft, tCanSlideRight);
 						}
+						
+						isInCenter = true;
 					}
 
 				}
 				if (oldScrollX >= 0 && canSlideRight) {
 					if (xVelocity < -VELOCITY) {
 						dx = getDetailViewWidth() - oldScrollX;
+						isInCenter = false;
 					} else if (xVelocity > VELOCITY) {
 						dx = -oldScrollX;
 						if (hasClickRight) {
 							hasClickRight = false;
 							setCanSliding(tCanSlideLeft, tCanSlideRight);
 						}
+						isInCenter = true;
 					} else if (oldScrollX > getDetailViewWidth() / 2) {
 						dx = getDetailViewWidth() - oldScrollX;
+						isInCenter = false;
 					} else if (oldScrollX <= getDetailViewWidth() / 2) {
 						dx = -oldScrollX;
 						if (hasClickRight) {
 							hasClickRight = false;
 							setCanSliding(tCanSlideLeft, tCanSlideRight);
 						}
+						isInCenter = true;
 					}
 				}
 
 				smoothScrollTo(dx);
 
+				isKnowLR = false;
+				mIsBeingDragged = false;
+				
 			}
 
 			break;
@@ -387,12 +439,14 @@ public class SlidingMenu extends RelativeLayout {
 			tCanSlideRight = canSlideRight;
 			hasClickLeft = true;
 			setCanSliding(true, false);
+			isInCenter = false;
 		} else if (oldScrollX == -menuWidth) {
 			smoothScrollTo(menuWidth);
 			if (hasClickLeft) {
 				hasClickLeft = false;
 				setCanSliding(tCanSlideLeft, tCanSlideRight);
 			}
+			isInCenter = true;
 		}
 	}
 
@@ -408,12 +462,14 @@ public class SlidingMenu extends RelativeLayout {
 			tCanSlideRight = canSlideRight;
 			hasClickRight = true;
 			setCanSliding(false, true);
+			isInCenter = false;
 		} else if (oldScrollX == menuWidth) {
 			smoothScrollTo(-menuWidth);
 			if (hasClickRight) {
 				hasClickRight = false;
 				setCanSliding(tCanSlideLeft, tCanSlideRight);
 			}
+			isInCenter = true;
 		}
 	}
 
