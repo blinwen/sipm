@@ -1,14 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="46dip"
     android:gravity="center_vertical"
-    android:padding="0.0px" >
+    android:background="@drawable/chat_title_bg_repeat"
+    android:padding="0.0px" 
+    android:orientation="horizontal">
+	
+    <LinearLayout 
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="50"
+        android:gravity="center"
+        android:orientation="vertical">
+	    <Button 
+	        android:paddingTop="4dp"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:background="@drawable/foot_button_bg_selector"
+	        android:textColor="@color/white"
+	        android:text="下一题"
+	        android:textSize="13sp"
+	        android:drawableTop="@drawable/foot_next_selector"/>
 
-    <ImageView
-        android:id="@+id/rlCommenFoootBG"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:background="@drawable/chat_title_bg_repeat"
-        android:contentDescription="@string/app_name" />
-</RelativeLayout>
+	</LinearLayout>
+	
+	<LinearLayout 
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="50"
+        android:gravity="center"
+        android:orientation="vertical">
+		<Button 
+		    android:paddingTop="4dp"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:drawableTop="@drawable/foot_answer_selector"
+	        android:background="@drawable/foot_button_bg_selector"
+	        android:text="答案"
+	        android:textSize="13sp"
+	        android:textColor="@color/white"/>
+
+		</LinearLayout>
+</LinearLayout>

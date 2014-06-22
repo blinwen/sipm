@@ -335,7 +335,7 @@ public class SlidingMenu extends RelativeLayout {
 			if (mIsBeingDragged) {
 				final VelocityTracker velocityTracker = mVelocityTracker;
 				velocityTracker.computeCurrentVelocity(100);
-				float xVelocity = velocityTracker.getXVelocity();// 婊戝姩鐨勯�搴�				
+				float xVelocity = velocityTracker.getXVelocity();//				
 				int oldScrollX = mSlidingView.getScrollX();
 				int dx = 0;
 				if (oldScrollX <= 0 && canSlideLeft) {// left view
@@ -425,9 +425,7 @@ public class SlidingMenu extends RelativeLayout {
 		invalidate();
 	}
 
-	/*
-	 * 鏄剧ず宸︿晶杈圭殑view
-	 * */
+
 	public void showLeftView() {
 		int menuWidth = mMenuView.getWidth();
 		int oldScrollX = mSlidingView.getScrollX();
