@@ -1,73 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/white"
-    android:clickable="true"
     android:orientation="vertical" >
-
+    
     <include
         android:layout_width="match_parent"
         layout="@layout/main_title"
         android:focusable="true" />
-<LinearLayout 
-    android:layout_width="match_parent"
-	android:layout_height="match_parent"
-	android:background="@android:color/transparent">
-    <FrameLayout 
+    
+    <ListView 
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@android:color/transparent">
+        android:background="@android:color/white"
+        android:id="@+id/main_exam_index_view"
+        android:cacheColorHint="@android:color/transparent">
         
-		<ScrollView 
-	        android:layout_width="match_parent"
-	        android:layout_height="match_parent"
-	        android:background="@android:color/transparent">
-	        <LinearLayout 
-	            android:layout_width="match_parent"
-	            android:layout_height="wrap_content"
-	            android:background="@android:color/transparent"
-	            android:orientation="vertical"
-	            android:layout_margin="15sp">
-	            <LinearLayout 
-	                android:layout_width="match_parent"
-	                android:layout_height="match_parent"
-	                android:background="@android:color/transparent"
-	                android:id="@+id/content_root"
-	                android:orientation="vertical">
-
-	            </LinearLayout>
-
-
-				<LinearLayout 
-	            	android:layout_width="match_parent"
-	            	android:layout_height="68sp"
-	            	android:background="@android:color/transparent"/>
-	   
-	        	
-	        </LinearLayout>
-	        
-
-    	</ScrollView>
-    	
-
-			    
-		<LinearLayout
-		    android:id="@+id/foot"
-			android:layout_height="46sp"
-			android:layout_width="match_parent"
-			android:layout_gravity="bottom"
-			android:orientation="horizontal"
-			android:visibility="visible">
-		    
-		<include
-		        android:layout_width="match_parent"
-		        layout="@layout/main_foot"
-		        android:focusable="true" />
-
-		</LinearLayout>
-    
-    </FrameLayout>
-</LinearLayout>
-
+    </ListView>
 </LinearLayout>

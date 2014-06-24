@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:baselineAligned="false"
     android:layout_width="fill_parent"
-    android:layout_height="46dip"
+    android:layout_height="52dip"
     android:gravity="center_vertical"
-    android:background="@drawable/chat_title_bg_repeat"
+    android:background="@drawable/foot_bg_blue"
     android:padding="0.0px" 
     android:orientation="horizontal">
 	
@@ -19,7 +20,7 @@
 	        android:layout_height="wrap_content"
 	        android:background="@drawable/foot_button_bg_selector"
 	        android:textColor="@color/white"
-	        android:text="下一题"
+	        android:text="@string/next_question"
 	        android:textSize="13sp"
 	        android:drawableTop="@drawable/foot_next_selector"/>
 
@@ -37,7 +38,7 @@
 	        android:layout_height="wrap_content"
 	        android:drawableTop="@drawable/foot_answer_selector"
 	        android:background="@drawable/foot_button_bg_selector"
-	        android:text="答案"
+	        android:text="@string/answer"
 	        android:textSize="13sp"
 	        android:textColor="@color/white"/>
 

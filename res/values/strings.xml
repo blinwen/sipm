@@ -14,4 +14,5 @@
 	<string name="choice_item_d">D 用户的战略计划</string>
 	<string name="next_question">下一题</string>
 	<string name="show_answer">显示答案</string>
+	<string name="answer">答案</string>
 </resources>

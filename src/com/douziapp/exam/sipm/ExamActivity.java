@@ -7,7 +7,7 @@ import com.douziapp.exam.slidingmenu.LeftFragment;
 import com.douziapp.exam.slidingmenu.RightFragment;
 import com.douziapp.exam.slidingmenu.SlidingMenu;
 import com.douziapp.exam.slidingmenu.ViewPageFragment;
-import com.douziapp.exam.slidingmenu.ViewPageFragment.MyPageChangeListener;
+
 
 
 import android.content.Context;
@@ -56,7 +56,7 @@ public class ExamActivity extends FragmentActivity {
 		super.onCreate(savedInstanceState);
 		
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
-		setContentView(R.layout.main);
+		setContentView(R.layout.exam_main);
 		
 		init();
 		

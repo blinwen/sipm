@@ -37,21 +37,31 @@ public class ViewPageFragment extends Fragment {
 
 	//private Button showLeft;
 	//private Button showRight;
-	private MyAdapter mAdapter;
+	//private MyAdapter mAdapter;
 	//private ViewPager mPager;
-	private ArrayList<Fragment> pagerItemList = new ArrayList<Fragment>();
+	//private ArrayList<Fragment> pagerItemList = new ArrayList<Fragment>();
 
+	private int mResourceId = 0;
+	
+	public void setResource(int resource){
+		
+		mResourceId = resource;
+	}
+	
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		View mView = inflater.inflate(R.layout.activity_main, null);
+		
+		if(0 == mResourceId){
+			mResourceId = R.layout.activity_exam;
+		}
+		
+		View mView = inflater.inflate(mResourceId, null);
 		//showLeft = (Button) mView.findViewById(R.id.showLeft);
 		//showRight = (Button) mView.findViewById(R.id.showRight);
 		//mPager = (ViewPager) mView.findViewById(R.id.pager);
-		PageFragment1 page1 = new PageFragment1();
-		PageFragment2 page2 = new PageFragment2();
-		pagerItemList.add(page1);
-		pagerItemList.add(page2);
-		//mAdapter = new MyAdapter(getFragmentManager());
+		//PageFragment1 page1 = new PageFragment1();
+		//PageFragment2 page2 = new PageFragment2();
+		//pagerItemList.add(page1);
 		//mPager.setAdapter(mAdapter);
 //		mPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
 //
@@ -115,40 +125,40 @@ public class ViewPageFragment extends Fragment {
 //			return false;
 //	}
 
-	public class MyAdapter extends FragmentPagerAdapter {
-		public MyAdapter(FragmentManager fm) {
-			super(fm);
-		}
+//	public class MyAdapter extends FragmentPagerAdapter {
+//		public MyAdapter(FragmentManager fm) {
+//			super(fm);
+//		}
+//
+//		@Override
+//		public int getCount() {
+//			return pagerItemList.size();
+//		}
+//
+//		@Override
+//		public Fragment getItem(int position) {
+//
+//			Fragment fragment = null;
+//			if (position < pagerItemList.size())
+//				fragment = pagerItemList.get(position);
+//			else
+//				fragment = pagerItemList.get(0);
+//
+//			return fragment;
+//
+//		}
+//	}
 
-		@Override
-		public int getCount() {
-			return pagerItemList.size();
-		}
-
-		@Override
-		public Fragment getItem(int position) {
-
-			Fragment fragment = null;
-			if (position < pagerItemList.size())
-				fragment = pagerItemList.get(position);
-			else
-				fragment = pagerItemList.get(0);
-
-			return fragment;
-
-		}
-	}
-
-	private MyPageChangeListener myPageChangeListener;
-
-	public void setMyPageChangeListener(MyPageChangeListener l) {
-
-		myPageChangeListener = l;
-
-	}
-
-	public interface MyPageChangeListener {
-		public void onPageSelected(int position);
-	}
+//	private MyPageChangeListener myPageChangeListener;
+//
+//	public void setMyPageChangeListener(MyPageChangeListener l) {
+//
+//		myPageChangeListener = l;
+//
+//	}
+//
+//	public interface MyPageChangeListener {
+//		public void onPageSelected(int position);
+//	}
 
 }

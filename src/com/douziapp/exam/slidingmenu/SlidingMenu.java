@@ -56,11 +56,17 @@ public class SlidingMenu extends RelativeLayout {
 	
 	private boolean isInCenter = true;
 	
+	private boolean mAutoGesture = true;
+	
 	public SlidingMenu(Context context) {
 		super(context);
 		init(context);
 	}
 
+	public void setAutoGesture(boolean auto){
+		mAutoGesture = auto;
+	}
+	
 	private void init(Context context) {
 		
 		mContext = context;
@@ -199,7 +205,7 @@ public class SlidingMenu extends RelativeLayout {
 				//{{
 				//wenbaolin add 智能识别是左滑还是右滑
 				//并且只有在未识别的时候并且未拖动的时候,并且主视图不在正中间的时候
-				if(!isKnowLR && !mIsBeingDragged && isInCenter ){
+				if(!isKnowLR && !mIsBeingDragged && isInCenter && mAutoGesture){
 					//Log.w("T", "know rl " + dx);
 					if(dx < 0){
 						setCanSliding(false,true);

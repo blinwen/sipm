@@ -26,9 +26,20 @@ import android.view.ViewGroup;
 
 public class RightFragment extends Fragment {
 
+	int mResourceId = 0;
+	
+	public void setResource(int resourceid){
+		mResourceId = resourceid;
+	}
+	
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		View view = inflater.inflate(R.layout.right, null);
+		
+		if( 0 == mResourceId ){
+			mResourceId = R.layout.left;
+		}
+		
+		View view = inflater.inflate(mResourceId, null);
 		return view;
 	}
 
