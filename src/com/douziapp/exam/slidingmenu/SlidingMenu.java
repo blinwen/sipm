@@ -170,8 +170,7 @@ public class SlidingMenu extends RelativeLayout {
 		canSlideRight = right;
 	}
 
-	
-	/*鎷︽埅touch浜嬩欢*/
+
 	@Override
 	public boolean onInterceptTouchEvent(MotionEvent ev) {
 
@@ -262,7 +261,7 @@ public class SlidingMenu extends RelativeLayout {
 		return mIsBeingDragged;
 	}
 
-	/*澶勭悊鎷︽埅鍚庣殑touch浜嬩欢*/
+
 	@Override
 	public boolean onTouchEvent(MotionEvent ev) {
 		if (mVelocityTracker == null) {
@@ -454,7 +453,6 @@ public class SlidingMenu extends RelativeLayout {
 		}
 	}
 
-	/*鏄剧ず鍙充晶杈圭殑view*/
 	public void showRightView() {
 		int menuWidth = mDetailView.getWidth();
 		int oldScrollX = mSlidingView.getScrollX();

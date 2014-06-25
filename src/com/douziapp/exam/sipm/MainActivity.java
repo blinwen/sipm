@@ -6,9 +6,11 @@ import com.douziapp.exam.slidingmenu.SlidingMenu;
 import com.douziapp.exam.slidingmenu.ViewPageFragment;
 
 import android.app.Activity;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
+import android.widget.TextView;
 
 public class MainActivity extends FragmentActivity {
 
@@ -16,6 +18,8 @@ public class MainActivity extends FragmentActivity {
 	LeftFragment 		leftFragment;
 	SlidingMenu 		mSlidingMenu;
 	ViewPageFragment 	centerFragment;
+	
+	TextView			mImgExamBankManager;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -25,6 +29,21 @@ public class MainActivity extends FragmentActivity {
 		setContentView(R.layout.exam_main);
 		
 		init();
+	}
+
+	@Override
+	protected void onStart() {
+		
+		super.onStart();
+		
+		mImgExamBankManager = (TextView)findViewById(R.id.ico_exam_bank_manager);
+		
+		
+		
+		Typeface font = Typeface.createFromAsset(getAssets(), "font/glyphicons.ttf");
+		mImgExamBankManager.setTypeface(font);
+		
+		mImgExamBankManager.setText(getString(R.string.ico_exam_bank_manager));
 	}
 
 	private void init() {
@@ -44,7 +63,7 @@ public class MainActivity extends FragmentActivity {
 				.beginTransaction();
 		
 		leftFragment = new LeftFragment();
-		//leftFragment.setResource(0);
+		leftFragment.setResource(R.layout.main_left);
 		t.replace(R.id.left_frame, leftFragment);
 
 		rightFragment = new RightFragment();

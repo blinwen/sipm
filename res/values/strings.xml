@@ -15,4 +15,5 @@
 	<string name="next_question">下一题</string>
 	<string name="show_answer">显示答案</string>
 	<string name="answer">答案</string>
+	<string name="ico_exam_bank_manager">&#xe137;</string>
 </resources>
