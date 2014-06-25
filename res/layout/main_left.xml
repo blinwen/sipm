@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" 
+    android:background="@color/bg_color_deep" >
+    
+    <LinearLayout
+        android:layout_width="200dp"
+        android:layout_height="match_parent"
+        android:background="@color/bg_color_deep"
+        android:orientation="vertical" >
+        
+        <LinearLayout 
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="20sp"
+            android:background="@android:color/transparent"
+            android:gravity="center"
+            android:orientation="horizontal">
+            
+            <TextView 
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:id="@+id/ico_exam_bank_manager"
+                android:textSize="23sp"
+                android:textColor="@android:color/black"
+                android:layout_marginTop="4sp"
+                android:layout_marginRight="24sp"/>
+            <TextView 
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="题库管理"
+                android:textSize="15sp"
+                android:layout_marginTop="4sp"
+                android:textColor="@color/black"
+                android:id="@+id/text_exam_bank_manager"/>
+        </LinearLayout>
+        
+                <include
+            android:layout_width="fill_parent"
+            android:layout_height="2dp"
+            layout="@layout/line" >
+        </include>
+	</LinearLayout>
+</LinearLayout>
