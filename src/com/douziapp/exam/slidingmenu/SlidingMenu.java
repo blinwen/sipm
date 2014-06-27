@@ -152,9 +152,9 @@ public class SlidingMenu extends RelativeLayout {
 					if (mSlidingView != null) {
 						mSlidingView.scrollTo(x, y);
 						if (x < 0)
-							bgShade.scrollTo(x + 20, y);// 鑳屾櫙闃村奖鍙冲亸
+							bgShade.scrollTo(x + 20, y);
 						else
-							bgShade.scrollTo(x - 20, y);// 鑳屾櫙闃村奖宸﹀亸
+							bgShade.scrollTo(x - 20, y);
 					}
 				}
 				invalidate();
@@ -223,7 +223,7 @@ public class SlidingMenu extends RelativeLayout {
 						mDetailView.setVisibility(View.VISIBLE);
 					}
 				}else{
-					Log.w("T", "isKnowLR  " + isKnowLR + "||mIsBeingDragged " + mIsBeingDragged + "||isInCenter " + isInCenter);
+					//Log.w("T", "isKnowLR  " + isKnowLR + "||mIsBeingDragged " + mIsBeingDragged + "||isInCenter " + isInCenter);
 				}
 				//}}
 				
