@@ -191,7 +191,7 @@ public class ExamActivity extends FragmentActivity {
 			
 			TextView title = (TextView)root.findViewById(R.id.exam_item_index);
 			
-			title.setText(mData.get(i) + "Ã‚");
+			title.setText(mData.get(i) + "È¢ò");
 			
 			return root;
 		}
