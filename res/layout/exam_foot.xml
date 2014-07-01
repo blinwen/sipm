@@ -22,6 +22,7 @@
 	        android:textColor="@color/white"
 	        android:text="@string/next_question"
 	        android:textSize="13sp"
+	        android:id="@+id/next_exam_item"
 	        android:drawableTop="@drawable/foot_next_selector"/>
 
 	</LinearLayout>

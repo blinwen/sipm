@@ -11,7 +11,27 @@ public class SingleChoice {
 	
 	private String	vContent;
 	
+	private String	aContent;
+	
+	public String getaContent() {
+		return aContent;
+	}
+
+	public void setaContent(String aContent) {
+		this.aContent = aContent;
+	}
+
 	private long	rightItem;
+	
+	private long	id;
+
+	public long getId() {
+		return id;
+	}
+
+	public void setId(long id) {
+		this.id = id;
+	}
 
 	public String getSelItemA() {
 		return selItemA;

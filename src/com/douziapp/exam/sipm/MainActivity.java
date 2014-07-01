@@ -73,6 +73,7 @@ public class MainActivity extends FragmentActivity {
 				
 				Intent intent = new Intent(MainActivity.this,ExamActivity.class);
 				
+				intent.putExtra("db", "");
 				
 				startActivity(intent);
 				
