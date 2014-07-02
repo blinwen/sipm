@@ -1,8 +1,14 @@
 package com.douziapp.exam.sipm;
 
 
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import com.douziapp.exam.data.CommDBUtil;
 import com.douziapp.exam.data.SingleChoice;
@@ -10,6 +16,13 @@ import com.douziapp.exam.slidingmenu.LeftFragment;
 import com.douziapp.exam.slidingmenu.RightFragment;
 import com.douziapp.exam.slidingmenu.SlidingMenu;
 import com.douziapp.exam.slidingmenu.ViewPageFragment;
+
+
+
+
+
+
+
 
 
 
@@ -34,6 +47,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.text.Html;
 import android.text.Html.ImageGetter;
 import android.text.Spanned;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -91,13 +105,91 @@ public class ExamActivity extends FragmentActivity {
 		super.onStart();
 		
 		CommDBUtil db_tool = new CommDBUtil("", 1);
-		mListSc = db_tool.getAllSingleChoice();
+		mListSc = db_tool.getAllSingleChoice(true);
 		
 		initView();
 		
 		initContent();
 	}
 	
+	private String saveImage(byte[] i,String s){
+		
+		if(null == i || null == s){
+			return null;
+		}
+		
+		String	out = null;
+		FileOutputStream fos = null;
+		BufferedOutputStream bos = null;
+		try{
+			String dir = this.getFilesDir().getPath();
+			File file = new File(dir + "/" + s + ".png");
+			fos = new FileOutputStream(file);  
+			bos = new BufferedOutputStream(fos);  
+            bos.write(i);
+            
+            out = file.getPath();
+		}catch(Exception e){
+			e.printStackTrace();
+		}finally{
+			if(null != bos){
+				try {
+					bos.close();
+				} catch (IOException e) {
+
+					e.printStackTrace();
+				}
+			}
+			
+			if(null != fos){
+				
+				try {
+					fos.close();
+				} catch (IOException e) {
+
+					e.printStackTrace();
+				}
+			}
+		}
+		
+		return out;
+	}
+	
+	private String	transImage(String strContetn){
+		
+		String strExp = "#\\{\\w{8}-(\\w{4}-){3}\\w{12}\\}";
+
+		Pattern pat = Pattern.compile(strExp);
+		
+		Matcher mat = pat.matcher(strContetn);
+		
+		if(!mat.find()){
+			return strContetn;
+		}
+		
+		for(int i = 0; i < mat.groupCount(); i++){
+			
+			String strMatch = mat.group(i);
+			String strGuid = strMatch.substring(2, strMatch.length()-1);
+			String	strFile;
+			CommDBUtil db_tool = new CommDBUtil("", 1);
+			
+			byte[] b = db_tool.i(strGuid, true);
+			if(null != b){
+				strFile = saveImage(b, strGuid);
+				
+				if(null != strFile){
+					
+					String temp = "<img src='"+strFile+"'>";
+					
+					strContetn = strContetn.replace(strMatch, temp);
+				}
+
+			}
+		}
+		
+		return strContetn;
+	}
 	private CharSequence  transContent(String strContetn){
 		
 		ImageGetter imageGetter = new Html.ImageGetter(){
@@ -108,13 +200,33 @@ public class ExamActivity extends FragmentActivity {
 				Drawable drawable = null;  
                 
 	              drawable = Drawable.createFromPath(source); //显示本地图片  
-	              drawable.setBounds(0, 0, drawable.getIntrinsicWidth(), drawable  
-	                            .getIntrinsicHeight());  
+	              int width = drawable.getIntrinsicWidth();
+	              int height = drawable.getIntrinsicHeight();
+	              
+	              //{{
+	              DisplayMetrics dm = new DisplayMetrics();
+
+	              getWindowManager().getDefaultDisplay().getMetrics(dm);
+
+	              int sw = (int) (dm.widthPixels * 0.9);
+
+	              int sh = (int) (dm.heightPixels * 0.9);
+	              
+	              if(sw < width){
+	            	  
+	            	  height = (int) (sw * (height * 1.0 / width));
+	            	  
+	            	  width = sw;
+	              }
+	              //}}
+	              drawable.setBounds(0, 0, width, height);  
 	              
 	              return drawable;
 			}
 			
 		};
+		
+		strContetn = transImage(strContetn);
 		
 		Spanned sp = Html.fromHtml(strContetn, imageGetter, null);
 		
@@ -288,15 +400,26 @@ public class ExamActivity extends FragmentActivity {
 			mContext = context;
 		}
 		
+		public boolean isEmpty(){
+			
+			return mData == null ? true: false;
+		}
+		
 		@Override
 		public int getCount() {
-			// TODO Auto-generated method stub
+			
+			if(isEmpty()){
+				return 0;
+			}
 			return mData.size();
 		}
 
 		@Override
 		public Object getItem(int i) {
-			// TODO Auto-generated method stub
+			
+			if(isEmpty()){
+				return 0;
+			}
 			return mData.get(i);
 		}
 
