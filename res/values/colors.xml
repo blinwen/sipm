@@ -12,4 +12,5 @@
     <color name="black_half">#50000000</color>
     <color name="l_white">#33FFFFFF</color>
     <color name="m_white">#88FFFFFF</color>
+    <color name="orange">#FFA500</color>
 </resources>

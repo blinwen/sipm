@@ -6,7 +6,9 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -16,27 +18,6 @@ import com.douziapp.exam.slidingmenu.LeftFragment;
 import com.douziapp.exam.slidingmenu.RightFragment;
 import com.douziapp.exam.slidingmenu.SlidingMenu;
 import com.douziapp.exam.slidingmenu.ViewPageFragment;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 import android.content.Context;
 import android.graphics.Color;
@@ -49,6 +30,7 @@ import android.text.Html.ImageGetter;
 import android.text.Spanned;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -81,11 +63,15 @@ public class ExamActivity extends FragmentActivity {
 	
 	GridView			mGridSelExamItem;
 	
+	SelExamItemAdapter	mGridAdapter;
+	
 	LinearLayout		mContentRoot 	= null;
 	
 	Button				mBtnNexItem		= null;
 	
 	long				mCurItemIndex 	= 1;
+	
+	Map<Long,List<Long>>	mVCIndex		= new HashMap<Long,List<Long>>();
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -107,9 +93,46 @@ public class ExamActivity extends FragmentActivity {
 		CommDBUtil db_tool = new CommDBUtil("", 1);
 		mListSc = db_tool.getAllSingleChoice(true);
 		
+		pre_trans_data();
+		
 		initView();
 		
 		initContent();
+	}
+	
+	private void pre_trans_data(){
+		
+		if(null == mListSc){
+			return;
+		}
+		
+		long vid = 1;
+		
+		if(mListSc.size() > 1){
+			
+			vid = mListSc.get(0).getvID();
+		}
+		
+		List<Long>	v = new ArrayList<Long>();
+		
+		for(int ii = 0; ii < mListSc.size(); ii++){
+			
+			SingleChoice sc = mListSc.get(ii);
+			
+			
+			if(vid == sc.getvID()){
+				v.add(sc.getId());
+				continue;
+			}
+			
+			{
+				
+				mVCIndex.put(vid, v);
+				vid = sc.getvID();
+				v = new ArrayList<Long>();
+				v.add(sc.getId());
+			}
+		}
 	}
 	
 	private String saveImage(byte[] i,String s){
@@ -255,7 +278,81 @@ public class ExamActivity extends FragmentActivity {
 					ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT);
 
 		mContentRoot.removeAllViews();
+		
+		//添加题干
 		mContentRoot.addView(tv,params);
+
+		//通知网格,改变选中项的背景
+		mGridAdapter.notifyDataSetChanged();
+		
+		//添加选择项
+		long vid = mListSc.get((int)mCurItemIndex - 1).getvID();
+		
+		List<Long> lv = mVCIndex.get(vid);
+		
+		for (Long id : lv) {
+
+			SingleChoice s = mListSc.get(id.intValue() - 1);
+			
+			LinearLayout	subroot = new LinearLayout(this);
+
+			View			title 		= createTitle("题("+ id++ +")");
+			
+			subroot.setPadding(0, 4, 0, 6);
+			subroot.setOrientation(LinearLayout.VERTICAL);
+			subroot.addView(title,params);
+
+			View choiceItem = createChoiceItem(s.getSelItemA(),id.intValue(),"A");
+			subroot.addView(choiceItem, params);
+			
+			choiceItem = createChoiceItem(s.getSelItemB(),id.intValue(),"B");
+			subroot.addView(choiceItem, params);
+			
+			choiceItem = createChoiceItem(s.getSelItemC(),id.intValue(),"C");
+			subroot.addView(choiceItem, params);
+			
+			choiceItem = createChoiceItem(s.getSelItemD(),id.intValue(),"D");
+			subroot.addView(choiceItem, params);
+			
+			mContentRoot.addView(subroot, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+		}
+		
+		
+	}
+	
+	private View createTitle(String str){
+		
+		TextView v = new TextView(this);
+		
+		v.setText(str);
+		v.setTextColor(Color.BLACK);
+		//v.setTextSize(15);
+		v.setPadding(0, 30, 0, 7);
+		v.setGravity(Gravity.CENTER_VERTICAL);
+		v.setBackgroundColor(Color.TRANSPARENT);
+		
+		return v;
+	}
+	
+	private View createChoiceItem(String str,int id,String index){
+		
+//		Button btn = new Button(this);
+//		
+//		btn.setText(str);
+//		btn.setTextColor(Color.BLACK);
+//		//btn.setTextSize(18);
+//		btn.setPadding(10, 1, 0, 1);
+//		btn.setGravity(Gravity.CENTER_VERTICAL);
+//		btn.setBackgroundColor(Color.TRANSPARENT);
+//		btn.setId(id);
+		
+		View item_view = View.inflate(this,R.layout.exam_choice_item,null);
+		Button btn = (Button) item_view.findViewById(R.id.choice_btn);
+		btn.setText(str);
+		
+		TextView index_view = (TextView)item_view.findViewById(R.id.choice_index_title);
+		index_view.setText(index);
+		return item_view;
 	}
 	
 	private void initView(){
@@ -269,7 +366,8 @@ public class ExamActivity extends FragmentActivity {
 		
 		mBtnNexItem		= (Button)findViewById(R.id.next_exam_item);
 		
-		mGridSelExamItem.setAdapter(new SelExamItemAdapter(mListSc,this));
+		mGridAdapter 	= new SelExamItemAdapter(mListSc,this);
+		mGridSelExamItem.setAdapter(mGridAdapter);
 		
 		mGridSelExamItem.setOnItemClickListener(new OnItemClickListener() {
 
@@ -326,7 +424,19 @@ public class ExamActivity extends FragmentActivity {
 					return;
 				}
 				
-				mCurItemIndex++;
+				long vid = mListSc.get((int)mCurItemIndex - 1).getvID();
+				
+				for(long ii = mCurItemIndex; 
+						mCurItemIndex < mListSc.size();ii++){
+					
+					SingleChoice sc = mListSc.get((int)ii - 1);
+					if(vid == sc.getvID()){
+						continue;
+					}
+					
+					mCurItemIndex = ii;
+					break;
+				}
 						
 				initContent();
 			}
@@ -387,7 +497,9 @@ public class ExamActivity extends FragmentActivity {
 		mSlidingMenu.showRightView();
 	}
 	
-	
+	private static class ViewHolderItem{
+		TextView 	title_view;
+	}
 	
 	public class SelExamItemAdapter extends BaseAdapter{
 		
@@ -432,16 +544,32 @@ public class ExamActivity extends FragmentActivity {
 		@Override
 		public View getView(int i, View view, ViewGroup viewgroup) {
 			
-			LayoutInflater inflater =(LayoutInflater) mContext.getSystemService(
-										Context.LAYOUT_INFLATER_SERVICE);
+			ViewHolderItem viewHolder = null;
 			
-			View root = inflater.inflate(R.layout.grid_sel_item, null);
+			if(null == view){
+				
+				LayoutInflater inflater =(LayoutInflater) mContext.getSystemService(
+											Context.LAYOUT_INFLATER_SERVICE);
+				
+				view = inflater.inflate(R.layout.grid_sel_item, null);
+				
+				viewHolder = new ViewHolderItem();
+				viewHolder.title_view = (TextView)view.findViewById(R.id.exam_item_index);
+				
+				view.setTag(viewHolder);
+			}else{
+				viewHolder = (ViewHolderItem)view.getTag();
+			}
 			
-			TextView title = (TextView)root.findViewById(R.id.exam_item_index);
+			viewHolder.title_view.setText(i+1 + "题");
 			
-			title.setText(i+1 + "题");
+			if(i + 1 == mCurItemIndex ){
+				viewHolder.title_view.setBackgroundColor(Color.rgb(0xff, 0xA5, 0x00));
+			}else{
+				viewHolder.title_view.setBackgroundColor(Color.TRANSPARENT);
+			}
 			
-			return root;
+			return view;
 		}
 		
 	}

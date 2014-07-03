@@ -42,7 +42,7 @@
 		    android:layout_width="fill_parent"
 		    android:layout_height="match_parent"
 		    android:id="@+id/grid_sel_exam_item"
-		    android:verticalSpacing="10dp"  
+		    android:verticalSpacing="18dp"  
 		    android:horizontalSpacing="10dp"  
 		    android:columnWidth="50dp"  
 		    android:numColumns="auto_fit" 

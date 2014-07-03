@@ -23,7 +23,9 @@
 	        android:text="@string/next_question"
 	        android:textSize="13sp"
 	        android:id="@+id/next_exam_item"
-	        android:drawableTop="@drawable/foot_next_selector"/>
+	        android:drawableTop="@drawable/foot_next_selector"
+	        android:paddingLeft="20sp"
+	        android:paddingRight="20sp"/>
 
 	</LinearLayout>
 	
@@ -41,7 +43,9 @@
 	        android:background="@drawable/foot_button_bg_selector"
 	        android:text="@string/answer"
 	        android:textSize="13sp"
-	        android:textColor="@color/white"/>
+	        android:textColor="@color/white"
+	        android:paddingLeft="20sp"
+	        android:paddingRight="20sp"/>
 
 		</LinearLayout>
 </LinearLayout>
