@@ -133,6 +133,8 @@ public class ExamActivity extends FragmentActivity {
 				v.add(sc.getId());
 			}
 		}
+		
+		mVCIndex.put(vid, v);
 	}
 	
 	private String saveImage(byte[] i,String s){
