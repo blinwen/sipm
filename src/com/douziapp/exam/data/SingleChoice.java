@@ -13,6 +13,12 @@ public class SingleChoice {
 	
 	private String	aContent;
 	
+	private long	rightItem;
+	
+	private long	id;
+	
+	private int		selItem = 0;
+
 	public String getaContent() {
 		return aContent;
 	}
@@ -20,11 +26,7 @@ public class SingleChoice {
 	public void setaContent(String aContent) {
 		this.aContent = aContent;
 	}
-
-	private long	rightItem;
 	
-	private long	id;
-
 	public long getId() {
 		return id;
 	}
@@ -87,6 +89,14 @@ public class SingleChoice {
 
 	public void setRightItem(long rightItem) {
 		this.rightItem = rightItem;
+	}
+
+	public int getSelItem() {
+		return selItem;
+	}
+
+	public void setSelItem(int selItem) {
+		this.selItem = selItem;
 	}
 	
 	

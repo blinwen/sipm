@@ -3,29 +3,56 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
-    android:padding="6sp">
-    
+    android:id="@+id/item_root">
+    <LinearLayout 
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:gravity="center_horizontal"
+        android:paddingRight="15sp"
+        android:paddingTop="8sp">
+    	
+        <ImageButton 
+            android:layout_height="34sp"
+            android:layout_width="27sp"
+            android:background="@drawable/btn_radio"
+            android:contentDescription="@string/app_name"
+            android:id="@+id/item_select_state"
+            android:visibility="visible"/>
+	
+		<ImageButton 
+		    android:layout_height="34sp"
+            android:layout_width="27sp"
+		    android:contentDescription="@string/app_name"
+		    android:visibility="gone"
+		    android:id="@+id/item_right_wrong"
+		    android:background="@drawable/icon_state_right"/>		 
+    </LinearLayout>
 	<LinearLayout 
 	    android:layout_width="10sp"
 	    android:layout_height="match_parent"
-	    android:layout_marginRight="6sp">
+	    android:layout_marginRight="6sp"
+	    android:paddingTop="2sp">
 	    <TextView 
 	        android:layout_width="match_parent"
 	        android:layout_height="match_parent"
 	        android:id="@+id/choice_index_title"
 	        android:text="@string/app_name"
-	        android:textColor="@color/black"/>
+	        android:textColor="@color/black"
+	        android:paddingTop="10sp"/>
 	</LinearLayout>
 	<LinearLayout 
 	    android:layout_width="match_parent"
 	    android:layout_height="match_parent"
 	    android:id="@+id/choice_btn_root"
-	    android:orientation="horizontal">
+	    android:orientation="horizontal"
+	    android:paddingTop="2sp">
 	    <Button 
 	        android:layout_width="match_parent"
 	        android:layout_height="wrap_content"
 	        android:id="@+id/choice_btn"
-	        android:background="@android:color/transparent"
-	        android:gravity="left"/>
+	        android:background="@drawable/choiceitem_selector"
+	        android:gravity="left"
+	        android:paddingTop="10sp"
+	        android:paddingBottom="10sp"/>
 	</LinearLayout>
 </LinearLayout>

@@ -22,7 +22,7 @@
 	        android:textColor="@color/white"
 	        android:text="@string/next_question"
 	        android:textSize="13sp"
-	        android:id="@+id/next_exam_item"
+	        android:id="@+id/btn_next_exam_item"
 	        android:drawableTop="@drawable/foot_next_selector"
 	        android:paddingLeft="20sp"
 	        android:paddingRight="20sp"/>
@@ -45,7 +45,8 @@
 	        android:textSize="13sp"
 	        android:textColor="@color/white"
 	        android:paddingLeft="20sp"
-	        android:paddingRight="20sp"/>
+	        android:paddingRight="20sp"
+	        android:id="@+id/btn_item_answer"/>
 
 		</LinearLayout>
 </LinearLayout>

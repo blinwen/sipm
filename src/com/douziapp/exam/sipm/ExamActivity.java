@@ -19,6 +19,8 @@ import com.douziapp.exam.slidingmenu.RightFragment;
 import com.douziapp.exam.slidingmenu.SlidingMenu;
 import com.douziapp.exam.slidingmenu.ViewPageFragment;
 
+import android.annotation.SuppressLint;
+import android.app.ActionBar.LayoutParams;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
@@ -29,14 +31,10 @@ import android.text.Html;
 import android.text.Html.ImageGetter;
 import android.text.Spanned;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewConfiguration;
 import android.view.View.OnClickListener;
-import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.AdapterView;
@@ -45,12 +43,19 @@ import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 public class ExamActivity extends FragmentActivity {
 
+	int type_img_wrong_right = 1;
+	int type_rd_select_state = 2;
+	int type_item_root_view = 3;
+
+	
+	
 	List<SingleChoice> mListSc;
 	
 	SlidingMenu 		mSlidingMenu;
@@ -68,9 +73,14 @@ public class ExamActivity extends FragmentActivity {
 	LinearLayout		mContentRoot 	= null;
 	
 	Button				mBtnNexItem		= null;
+	Button				mBtnAnswer		= null;
+	
+	TextView			mAnswerDetail	= null;
+	View				mRightViewRoot	= null;
 	
 	long				mCurItemIndex 	= 1;
 	
+	@SuppressLint("UseSparseArrays")
 	Map<Long,List<Long>>	mVCIndex		= new HashMap<Long,List<Long>>();
 	
 	@Override
@@ -217,6 +227,10 @@ public class ExamActivity extends FragmentActivity {
 	}
 	private CharSequence  transContent(String strContetn){
 		
+		if(null == strContetn || strContetn.length() < 1){
+			return "";
+		}
+		
 		ImageGetter imageGetter = new Html.ImageGetter(){
 
 			@Override
@@ -235,7 +249,7 @@ public class ExamActivity extends FragmentActivity {
 
 	              int sw = (int) (dm.widthPixels * 0.9);
 
-	              int sh = (int) (dm.heightPixels * 0.9);
+	              //int sh = (int) (dm.heightPixels * 0.9);
 	              
 	              if(sw < width){
 	            	  
@@ -298,28 +312,33 @@ public class ExamActivity extends FragmentActivity {
 			
 			LinearLayout	subroot = new LinearLayout(this);
 
-			View			title 		= createTitle("题("+ id++ +")");
+			View			title 		= createTitle("题("+ id +")");
 			
 			subroot.setPadding(0, 4, 0, 6);
 			subroot.setOrientation(LinearLayout.VERTICAL);
 			subroot.addView(title,params);
 
-			View choiceItem = createChoiceItem(s.getSelItemA(),id.intValue(),"A");
+			View choiceItem = createChoiceItem(s.getSelItemA(),id.intValue(),1);
 			subroot.addView(choiceItem, params);
 			
-			choiceItem = createChoiceItem(s.getSelItemB(),id.intValue(),"B");
+			choiceItem = createChoiceItem(s.getSelItemB(),id.intValue(),2);
 			subroot.addView(choiceItem, params);
 			
-			choiceItem = createChoiceItem(s.getSelItemC(),id.intValue(),"C");
+			choiceItem = createChoiceItem(s.getSelItemC(),id.intValue(),3);
 			subroot.addView(choiceItem, params);
 			
-			choiceItem = createChoiceItem(s.getSelItemD(),id.intValue(),"D");
+			choiceItem = createChoiceItem(s.getSelItemD(),id.intValue(),4);
 			subroot.addView(choiceItem, params);
 			
 			mContentRoot.addView(subroot, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
 		}
 		
-		
+		//答案详解
+		String	strAnswerDetail = sc.getaContent();
+		if(null == strAnswerDetail || strAnswerDetail.length() < 1){
+			strAnswerDetail = getString(R.string.no_answer);
+		}
+		mAnswerDetail.setText(transContent(strAnswerDetail));
 	}
 	
 	private View createTitle(String str){
@@ -336,7 +355,7 @@ public class ExamActivity extends FragmentActivity {
 		return v;
 	}
 	
-	private View createChoiceItem(String str,int id,String index){
+	private View createChoiceItem(String str,int id,int index){
 		
 //		Button btn = new Button(this);
 //		
@@ -348,13 +367,101 @@ public class ExamActivity extends FragmentActivity {
 //		btn.setBackgroundColor(Color.TRANSPARENT);
 //		btn.setId(id);
 		
-		View item_view = View.inflate(this,R.layout.exam_choice_item,null);
+
+		String strIndex = "";
+
+		switch (index) {
+		case 1:
+			strIndex = "A";
+			break;
+		case 2:
+			strIndex = "B";
+			break;
+		case 3:
+			strIndex = "C";
+			break;
+		case 4:
+			strIndex = "D";
+			break;
+		default:
+			break;
+		}
+		
+		View item_view = View.inflate(this, R.layout.exam_choice_item, null);
 		Button btn = (Button) item_view.findViewById(R.id.choice_btn);
 		btn.setText(str);
+
 		
 		TextView index_view = (TextView)item_view.findViewById(R.id.choice_index_title);
-		index_view.setText(index);
+		index_view.setText(strIndex);
+		
+		ImageButton view = (ImageButton)item_view.findViewById(R.id.item_right_wrong);
+		view.setId(gen_item_id(id, type_img_wrong_right, index));
+		
+		ImageButton state = (ImageButton)item_view.findViewById(R.id.item_select_state);
+		state.setId(gen_item_id(id, type_rd_select_state, index));
+		
+		LinearLayout ll = (LinearLayout)item_view.findViewById(R.id.item_root);
+		
+	
+		ll.setId(gen_item_id(id,type_item_root_view,index));
+		ll.setBackgroundResource(R.drawable.foot_button_bg_selector);
+
+		OnClickListener oc = new OnExamItemClick(id,index);
+		
+		state.setOnClickListener(oc);
+		btn.setOnClickListener(oc);
+		
 		return item_view;
+	}
+	
+	private class OnExamItemClick implements View.OnClickListener{
+
+		int mItemId;
+		int mIndex;
+		
+		public OnExamItemClick(int item_id,int index){
+			mItemId = item_id;
+			mIndex = index;
+		}
+		
+		@Override
+		public void onClick(View v) {
+			
+			for(int ii = 1; ii < 5; ii++){
+				
+				int id = gen_item_id(mItemId, type_rd_select_state, ii);
+				ImageButton ibtn= (ImageButton)findViewById(id);
+				
+				if(null == ibtn){
+					return;
+				}
+				
+				if(ii == mIndex)
+					ibtn.setBackgroundResource(R.drawable.btn_radio_on_selected);
+				else
+					ibtn.setBackgroundResource(android.R.drawable.btn_radio);
+				
+				mListSc.get(mItemId - 1).setSelItem(mIndex);
+			}
+
+		}
+		
+	}
+	
+	private int gen_item_id(long id,int type,int index){
+		
+		int out = 6 * 10000;
+		
+		out += id * 1000;
+		
+		out += type * 100;
+		
+		out += index * 10;
+		
+		return out;
+		
+		
 	}
 	
 	private void initView(){
@@ -366,10 +473,20 @@ public class ExamActivity extends FragmentActivity {
 		
 		mContentRoot	= (LinearLayout)findViewById(R.id.content_root);
 		
-		mBtnNexItem		= (Button)findViewById(R.id.next_exam_item);
+		mBtnNexItem		= (Button)findViewById(R.id.btn_next_exam_item);
+		mBtnAnswer		= (Button)findViewById(R.id.btn_item_answer);
+		
+		mAnswerDetail	= (TextView)findViewById(R.id.answer_detail);
+		mRightViewRoot	= findViewById(R.id.right_view_root);
 		
 		mGridAdapter 	= new SelExamItemAdapter(mListSc,this);
 		mGridSelExamItem.setAdapter(mGridAdapter);
+		
+		ViewGroup.LayoutParams lp = mRightViewRoot.getLayoutParams();
+		DisplayMetrics dm = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(dm);
+		lp.width = (int) (dm.widthPixels * 0.83);
+		mRightViewRoot.setLayoutParams(lp);
 		
 		mGridSelExamItem.setOnItemClickListener(new OnItemClickListener() {
 
@@ -443,6 +560,42 @@ public class ExamActivity extends FragmentActivity {
 				initContent();
 			}
 		});
+		
+		mBtnAnswer.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				
+				long vid = mListSc.get((int)mCurItemIndex - 1).getvID();
+				
+				List<Long> list_id = mVCIndex.get(vid);
+				
+				for(Long id : list_id){
+					SingleChoice sc = mListSc.get(id.intValue() - 1);
+					int right_id = gen_item_id(id, type_img_wrong_right, (int)sc.getRightItem());
+					int sel_id = gen_item_id(id, type_rd_select_state, (int)sc.getRightItem());
+					
+					ImageButton iv = (ImageButton)findViewById(right_id);
+					iv.setVisibility(View.VISIBLE);
+					iv.setBackgroundResource(R.drawable.icon_state_right);
+					
+					findViewById(sel_id).setVisibility(View.GONE);
+					
+					if(sc.getRightItem() != sc.getSelItem() &&
+							sc.getSelItem() != 0){
+						
+						int wrong_id = gen_item_id(id, type_img_wrong_right, sc.getSelItem());
+						sel_id = gen_item_id(id, type_rd_select_state, sc.getSelItem());
+						iv = (ImageButton)findViewById(wrong_id);
+						iv.setVisibility(View.VISIBLE);
+						iv.setBackgroundResource(R.drawable.icon_state_wrong);
+						findViewById(sel_id).setVisibility(View.GONE);
+					}
+					
+					
+				}
+			}
+		});
 	}
 	
 	private void initSlidingMenu() {
@@ -505,10 +658,10 @@ public class ExamActivity extends FragmentActivity {
 	
 	public class SelExamItemAdapter extends BaseAdapter{
 		
-		List<?>	mData;
+		List<SingleChoice>	mData;
 		Context	mContext;
 		
-		public SelExamItemAdapter(List<?> data,Context context){
+		public SelExamItemAdapter(List<SingleChoice> data,Context context){
 			super();
 			mData = data;
 			mContext = context;
@@ -565,10 +718,18 @@ public class ExamActivity extends FragmentActivity {
 			
 			viewHolder.title_view.setText(i+1 + "题");
 			
+			SingleChoice sc = mListSc.get(i);
+			
+			viewHolder.title_view.setBackgroundColor(Color.TRANSPARENT);
+			
+			if(sc.getSelItem() == sc.getRightItem()){
+				viewHolder.title_view.setBackgroundColor(Color.GREEN);
+			}else if(sc.getSelItem() != 0){
+				viewHolder.title_view.setBackgroundColor(Color.GRAY);
+			}
+			
 			if(i + 1 == mCurItemIndex ){
 				viewHolder.title_view.setBackgroundColor(Color.rgb(0xff, 0xA5, 0x00));
-			}else{
-				viewHolder.title_view.setBackgroundColor(Color.TRANSPARENT);
 			}
 			
 			return view;

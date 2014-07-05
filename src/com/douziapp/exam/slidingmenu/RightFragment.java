@@ -36,7 +36,7 @@ public class RightFragment extends Fragment {
 			Bundle savedInstanceState) {
 		
 		if( 0 == mResourceId ){
-			mResourceId = R.layout.left;
+			mResourceId = R.layout.right;
 		}
 		
 		View view = inflater.inflate(mResourceId, null);

@@ -45,7 +45,7 @@ public class SlidingMenu extends RelativeLayout {
 	private int mTouchSlop;
 	private float mLastMotionX;
 	private float mLastMotionY;
-	private static final int VELOCITY = 50;
+	private static final int VELOCITY = (int) (50 * 0.9);
 	private boolean mIsBeingDragged = true;
 	private boolean tCanSlideLeft = true;
 	private boolean tCanSlideRight = false;
@@ -57,6 +57,8 @@ public class SlidingMenu extends RelativeLayout {
 	private boolean isInCenter = true;
 	
 	private boolean mAutoGesture = true;
+	
+	private double mScrolDis = 2;
 	
 	public SlidingMenu(Context context) {
 		super(context);
@@ -356,11 +358,11 @@ public class SlidingMenu extends RelativeLayout {
 						}
 						
 						isInCenter = true;
-					} else if (oldScrollX < -getMenuViewWidth() / 2) {
+					} else if (oldScrollX < -getMenuViewWidth() / mScrolDis) {
 						dx = -getMenuViewWidth() - oldScrollX;
 						
 						isInCenter = false;
-					} else if (oldScrollX >= -getMenuViewWidth() / 2) {
+					} else if (oldScrollX >= -getMenuViewWidth() / mScrolDis) {
 						dx = -oldScrollX;
 						if (hasClickLeft) {
 							hasClickLeft = false;
@@ -382,10 +384,10 @@ public class SlidingMenu extends RelativeLayout {
 							setCanSliding(tCanSlideLeft, tCanSlideRight);
 						}
 						isInCenter = true;
-					} else if (oldScrollX > getDetailViewWidth() / 2) {
+					} else if (oldScrollX > getDetailViewWidth() / mScrolDis) {
 						dx = getDetailViewWidth() - oldScrollX;
 						isInCenter = false;
-					} else if (oldScrollX <= getDetailViewWidth() / 2) {
+					} else if (oldScrollX <= getDetailViewWidth() / mScrolDis) {
 						dx = -oldScrollX;
 						if (hasClickRight) {
 							hasClickRight = false;

@@ -4,9 +4,12 @@
     android:layout_height="fill_parent"
     android:background="@color/bg_color_deep" >
 
-    <RelativeLayout
-        android:layout_width="250dp"
-        android:layout_height="fill_parent" >
+    <LinearLayout
+        android:layout_width="270dp"
+        android:layout_height="match_parent"
+        android:background="@color/bg_color_deep"
+        android:orientation="vertical" 
+        android:id="@+id/right_view_root">
 
         <TextView
             android:id="@+id/title"
@@ -14,7 +17,7 @@
             android:layout_height="50dp"
             android:gravity="center_vertical"
             android:paddingLeft="20dp"
-            android:text="我的消息"
+            android:text="@string/answer_detail_title"
             android:textColor="@color/black"
             android:textSize="15sp" />
 
@@ -22,17 +25,29 @@
             android:id="@+id/line"
             android:layout_width="fill_parent"
             android:layout_height="2px"
-            layout="@layout/line"
-            android:layout_below="@+id/title" >
+            layout="@layout/line">
         </include>
-
-        <ListView
-            android:id="@+id/listView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_below="@+id/line" >
-        </ListView>
         
-    </RelativeLayout>
+		<ScrollView 
+	        android:layout_width="match_parent"
+	        android:layout_height="match_parent"
+	        android:background="@android:color/transparent">
+			<LinearLayout 
+			    android:layout_width="match_parent"
+			    android:layout_height="wrap_content"
+			    android:background="@android:color/transparent"
+			    android:paddingLeft="15sp"
+			    android:paddingRight="2sp">
+			    
+			    <TextView 
+			        android:layout_width="match_parent"
+			        android:layout_height="wrap_content"
+			        android:id="@+id/answer_detail"
+			        android:textColor="@color/black"
+			        android:text="@string/app_name"/>
+			</LinearLayout>
+        </ScrollView>
+        
+    </LinearLayout>
 
 </RelativeLayout>
