@@ -14,8 +14,12 @@
 	<string name="choice_item_d">D 用户的战略计划</string>
 	<string name="next_question">下一题</string>
 	<string name="show_answer">显示答案</string>
-	<string name="answer">答案</string>
+	<string name="answer">看答案</string>
+	<string name="answer2">答案详解</string>
 	<string name="answer_detail_title">试题分析与解答</string>
 	<string name="no_answer">"暂无"</string>
 	<string name="ico_exam_bank_manager">&#xe137;</string>
+	<string name="copyright_welcome"> &#169; 2014 DouziApp.com 豆子软件  </string>
+	<string name="reserved">All rights reserved</string>
+	<string name="full_name_ext">试题分析与解答</string>
 </resources>

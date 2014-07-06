@@ -1,8 +1,11 @@
 package com.douziapp.exam.sipm;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.douziapp.exam.data.CommDBUtil;
 import com.douziapp.exam.slidingmenu.LeftFragment;
 import com.douziapp.exam.slidingmenu.RightFragment;
 import com.douziapp.exam.slidingmenu.SlidingMenu;
@@ -35,6 +38,7 @@ public class MainActivity extends FragmentActivity {
 	
 	ListView			mExamIndex;
 	ExamIndexAdapter	mExamIndexAdapter;
+	List<String>		mExamData			= new ArrayList<String>();
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +48,8 @@ public class MainActivity extends FragmentActivity {
 		setContentView(R.layout.exam_main);
 		
 		init();
+		
+		initData();
 	}
 
 	@Override
@@ -53,8 +59,6 @@ public class MainActivity extends FragmentActivity {
 		
 		mImgExamBankManager = (TextView)findViewById(R.id.ico_exam_bank_manager);
 		
-		
-		
 		Typeface font = Typeface.createFromAsset(getAssets(), "font/glyphicons.ttf");
 		mImgExamBankManager.setTypeface(font);
 		
@@ -62,7 +66,7 @@ public class MainActivity extends FragmentActivity {
 		
 		mExamIndex = (ListView)findViewById(R.id.main_exam_index_view);
 
-		mExamIndexAdapter = new ExamIndexAdapter(this);
+		mExamIndexAdapter = new ExamIndexAdapter(this,mExamData);
 		mExamIndex.setAdapter(mExamIndexAdapter);
 		
 		mExamIndex.setOnItemClickListener(new OnItemClickListener() {
@@ -73,7 +77,9 @@ public class MainActivity extends FragmentActivity {
 				
 				Intent intent = new Intent(MainActivity.this,ExamActivity.class);
 				
-				intent.putExtra("db", "");
+				String db_name = mExamData.get(arg2);
+				
+				intent.putExtra("db", db_name);
 				
 				startActivity(intent);
 				
@@ -81,8 +87,36 @@ public class MainActivity extends FragmentActivity {
 				//		android.R.anim.slide_out_right);
 			}
 		});
+		
+		
 	}
 
+	private void getExamDBData(){
+		try {
+			String strDataPath = CommDBUtil.getDBPath(this);
+			String[] list_file = new File(strDataPath).list();
+			
+			if(null == list_file){
+				return;
+			}
+			
+			for (String string : list_file) {
+				mExamData.add(string);
+			}
+			
+		} catch (Exception e) {
+			
+			e.printStackTrace();
+		}
+	}
+	
+	private void initData(){
+		
+		CommDBUtil.checkDB(this);
+		
+		getExamDBData();
+	}
+	
 	private void init() {
 		
 		mSlidingMenu = (SlidingMenu) findViewById(R.id.slidingMenu);
@@ -112,7 +146,7 @@ public class MainActivity extends FragmentActivity {
 		
 		t.commit();
 
-
+		
 	}
 	
 	private static class ViewHolderItem{
@@ -126,31 +160,49 @@ public class MainActivity extends FragmentActivity {
 		private List<String>	mData;
 		
 		
-		
-		public ExamIndexAdapter(Context context){
-			this.mContext = context;
+		public ExamIndexAdapter(Context context,List<String> data){
 			
+			this.mContext = context;
 			mData = new ArrayList<String>();
 			
-			mData.add("2009年上半年上午试题分析与解答");
-			mData.add("2009年上半年上午试题分析与解答");
-			mData.add("2009年上半年上午试题分析与解答");
-			mData.add("2009年上半年上午试题分析与解答");
+			if(null != data ){
+				
+				for(int ii = 0; ii < data.size(); ii++){
+					
+					String strTemp = data.get(ii);
+					String[] split_arr = strTemp.split("_");
+					
+					if(split_arr.length != 4){
+						continue;
+					}
+					
+					StringBuffer sb = new StringBuffer();
+					sb.append(split_arr[0]);
+					sb.append("年");
+					
+					if("1".equalsIgnoreCase(split_arr[1] )){
+						sb.append("上半年");
+					}else if("2".equalsIgnoreCase(split_arr[1])){
+						sb.append("下半年");
+					}else{
+						continue;
+					}
+					
+					if("sw.db".equalsIgnoreCase(split_arr[3])){
+						sb.append("上午");
+					}else if("xw.db".equalsIgnoreCase(split_arr[3])){
+						sb.append("下午");
+					}else{
+						continue;
+					}
+					
+					sb.append("试题分析与解答");
+					
+					mData.add(sb.toString());
+				}
+			}
 			
-			mData.add("2010年上半年上午试题分析与解答");
-			mData.add("2010年上半年上午试题分析与解答");
-			mData.add("2010年上半年上午试题分析与解答");
-			mData.add("2010年上半年上午试题分析与解答");
 			
-			mData.add("2011年上半年上午试题分析与解答");
-			mData.add("2011年上半年上午试题分析与解答");
-			mData.add("2011年上半年上午试题分析与解答");
-			mData.add("2011年上半年上午试题分析与解答");
-			
-			mData.add("2012年上半年上午试题分析与解答");
-			mData.add("2012年上半年上午试题分析与解答");
-			mData.add("2012年上半年上午试题分析与解答");
-			mData.add("2012年上半年上午试题分析与解答");
 			
 		}
 		

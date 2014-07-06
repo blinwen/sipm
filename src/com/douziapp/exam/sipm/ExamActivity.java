@@ -22,6 +22,7 @@ import com.douziapp.exam.slidingmenu.ViewPageFragment;
 import android.annotation.SuppressLint;
 import android.app.ActionBar.LayoutParams;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -80,6 +81,14 @@ public class ExamActivity extends FragmentActivity {
 	
 	long				mCurItemIndex 	= 1;
 	
+	String				mYear;
+	String				mSXYear;
+	String				mSXDay;
+	String				mSubject = "xtjc";
+	String				mDBName;
+	
+	String				mMode			= "sw";	//sw or xw
+	
 	@SuppressLint("UseSparseArrays")
 	Map<Long,List<Long>>	mVCIndex		= new HashMap<Long,List<Long>>();
 	
@@ -87,8 +96,11 @@ public class ExamActivity extends FragmentActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
-		requestWindowFeature(Window.FEATURE_NO_TITLE);
+		//requestWindowFeature(Window.FEATURE_NO_TITLE);
+		
 		setContentView(R.layout.exam_main);
+		
+		pre_intent_data();
 		
 		initSlidingMenu();
 		
@@ -100,14 +112,35 @@ public class ExamActivity extends FragmentActivity {
 		
 		super.onStart();
 		
-		CommDBUtil db_tool = new CommDBUtil("", 1);
-		mListSc = db_tool.getAllSingleChoice(true);
+		CommDBUtil db_tool = new CommDBUtil(this,mDBName, CommDBUtil.OPEN_READONLY);
+		
+		if(mMode.equalsIgnoreCase("sw")){
+			mListSc = db_tool.getAllSingleChoice(true);
+		}else if(mMode.equalsIgnoreCase("xw")){
+			mListSc = db_tool.getAllExamQA(true);
+		}
+		
 		
 		pre_trans_data();
 		
 		initView();
 		
 		initContent();
+	}
+	
+	private void pre_intent_data(){
+		
+		Intent intent = getIntent();
+			
+		mDBName = intent.getStringExtra("db");
+		
+		if(mDBName.endsWith("sw.db")){
+			mMode = "sw";
+		}else if(mDBName.endsWith("xw.db")){
+			mMode = "xw";
+		}else{
+			mMode = "";
+		}
 	}
 	
 	private void pre_trans_data(){
@@ -207,7 +240,8 @@ public class ExamActivity extends FragmentActivity {
 			String strMatch = mat.group(i);
 			String strGuid = strMatch.substring(2, strMatch.length()-1);
 			String	strFile;
-			CommDBUtil db_tool = new CommDBUtil("", 1);
+			
+			CommDBUtil db_tool = new CommDBUtil(this,mDBName, 1);
 			
 			byte[] b = db_tool.i(strGuid, true);
 			if(null != b){
@@ -301,6 +335,17 @@ public class ExamActivity extends FragmentActivity {
 		//通知网格,改变选中项的背景
 		mGridAdapter.notifyDataSetChanged();
 		
+		//答案详解
+		String	strAnswerDetail = sc.getaContent();
+		if(null == strAnswerDetail || strAnswerDetail.length() < 1){
+			strAnswerDetail = getString(R.string.no_answer);
+		}
+		mAnswerDetail.setText(transContent(strAnswerDetail));
+		
+		if(mMode.equalsIgnoreCase("xw")){
+			return;
+		}
+		
 		//添加选择项
 		long vid = mListSc.get((int)mCurItemIndex - 1).getvID();
 		
@@ -333,12 +378,7 @@ public class ExamActivity extends FragmentActivity {
 			mContentRoot.addView(subroot, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
 		}
 		
-		//答案详解
-		String	strAnswerDetail = sc.getaContent();
-		if(null == strAnswerDetail || strAnswerDetail.length() < 1){
-			strAnswerDetail = getString(R.string.no_answer);
-		}
-		mAnswerDetail.setText(transContent(strAnswerDetail));
+
 	}
 	
 	private View createTitle(String str){
@@ -449,6 +489,15 @@ public class ExamActivity extends FragmentActivity {
 		
 	}
 	
+	private String	gen_db_file(){
+
+		String strOut = null;
+		
+		strOut = mYear + "_" + mSXYear + "_" + mSubject + "_" + mSXDay + ".db";
+		
+		return strOut;
+	}
+	
 	private int gen_item_id(long id,int type,int index){
 		
 		int out = 6 * 10000;
@@ -487,6 +536,10 @@ public class ExamActivity extends FragmentActivity {
         getWindowManager().getDefaultDisplay().getMetrics(dm);
 		lp.width = (int) (dm.widthPixels * 0.83);
 		mRightViewRoot.setLayoutParams(lp);
+		
+		if(mMode.equalsIgnoreCase("xw")){
+			mBtnAnswer.setText(getString(R.string.answer2));
+		}
 		
 		mGridSelExamItem.setOnItemClickListener(new OnItemClickListener() {
 
@@ -566,11 +619,17 @@ public class ExamActivity extends FragmentActivity {
 			@Override
 			public void onClick(View v) {
 				
+				if(mMode.equalsIgnoreCase("xw")){
+					mSlidingMenu.showRightView();
+					return;
+				}
+				
 				long vid = mListSc.get((int)mCurItemIndex - 1).getvID();
 				
 				List<Long> list_id = mVCIndex.get(vid);
 				
 				for(Long id : list_id){
+					
 					SingleChoice sc = mListSc.get(id.intValue() - 1);
 					int right_id = gen_item_id(id, type_img_wrong_right, (int)sc.getRightItem());
 					int sel_id = gen_item_id(id, type_rd_select_state, (int)sc.getRightItem());
@@ -722,7 +781,8 @@ public class ExamActivity extends FragmentActivity {
 			
 			viewHolder.title_view.setBackgroundColor(Color.TRANSPARENT);
 			
-			if(sc.getSelItem() == sc.getRightItem()){
+			if(sc.getSelItem() == sc.getRightItem() &&
+					sc.getRightItem() != 0){
 				viewHolder.title_view.setBackgroundColor(Color.GREEN);
 			}else if(sc.getSelItem() != 0){
 				viewHolder.title_view.setBackgroundColor(Color.GRAY);
