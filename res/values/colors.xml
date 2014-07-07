@@ -15,4 +15,5 @@
     <color name="orange">#FFA500</color>
     <color name="pressed_color">#FBB732</color>
     <color name="gray">#DDDDDD</color>
+    <color name="gray2">#EEEEEE</color>
 </resources>

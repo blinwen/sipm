@@ -36,12 +36,14 @@
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
 	        android:text="@string/app_name"
-	        android:textSize="20sp"/>
+	        android:textSize="20sp"
+	        android:textColor="@color/gray2"/>
 	    <TextView 
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
 	        android:text="@string/full_name_ext"
-	        android:textSize="20sp"/>
+	        android:textSize="20sp"
+	        android:textColor="@color/gray2"/>
 
 	</LinearLayout>
 	
