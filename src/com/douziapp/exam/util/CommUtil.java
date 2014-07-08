@@ -8,9 +8,22 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.sql.Connection;
 
+import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Environment;
 
 public class CommUtil {
+	
+	public static void 	downApkFromBrowser(Context context,String strUrl){
+		Intent intent = new Intent();
+		intent.setAction("android.intent.action.VIEW");
+		
+		Uri uri = Uri.parse(strUrl);
+		intent.setData(uri);
+		
+		context.startActivity(intent);
+	}
 	
 	public	static String	checkApkUpdate(){
 		
