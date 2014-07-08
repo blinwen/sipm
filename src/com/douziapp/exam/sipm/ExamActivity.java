@@ -12,12 +12,12 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import com.douziapp.exam.data.CommDBUtil;
 import com.douziapp.exam.data.SingleChoice;
 import com.douziapp.exam.slidingmenu.LeftFragment;
 import com.douziapp.exam.slidingmenu.RightFragment;
 import com.douziapp.exam.slidingmenu.SlidingMenu;
 import com.douziapp.exam.slidingmenu.ViewPageFragment;
+import com.douziapp.exam.util.CommDBUtil;
 
 import android.annotation.SuppressLint;
 import android.app.ActionBar.LayoutParams;

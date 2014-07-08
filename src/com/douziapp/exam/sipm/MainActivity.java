@@ -5,17 +5,20 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.douziapp.exam.data.CommDBUtil;
 import com.douziapp.exam.slidingmenu.LeftFragment;
 import com.douziapp.exam.slidingmenu.RightFragment;
 import com.douziapp.exam.slidingmenu.SlidingMenu;
 import com.douziapp.exam.slidingmenu.ViewPageFragment;
+import com.douziapp.exam.util.CommDBUtil;
+import com.douziapp.exam.util.CommUtil;
 
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
@@ -40,6 +43,8 @@ public class MainActivity extends FragmentActivity {
 	ExamIndexAdapter	mExamIndexAdapter;
 	List<String>		mExamData			= new ArrayList<String>();
 	
+	Handler				mHandler			= null;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 
@@ -47,9 +52,11 @@ public class MainActivity extends FragmentActivity {
 		
 		setContentView(R.layout.exam_main);
 		
-		init();
+		initSlidingMenu();
 		
 		initData();
+		
+		init();
 	}
 
 	@Override
@@ -110,6 +117,11 @@ public class MainActivity extends FragmentActivity {
 		}
 	}
 	
+	private void init(){
+		
+		mHandler = new MyHandler();
+	}
+	
 	private void initData(){
 		
 		CommDBUtil.checkDB(this);
@@ -117,7 +129,7 @@ public class MainActivity extends FragmentActivity {
 		getExamDBData();
 	}
 	
-	private void init() {
+	private void initSlidingMenu() {
 		
 		mSlidingMenu = (SlidingMenu) findViewById(R.id.slidingMenu);
 		mSlidingMenu.setLeftView(getLayoutInflater().inflate(
@@ -149,6 +161,34 @@ public class MainActivity extends FragmentActivity {
 		
 	}
 	
+	
+	
+	private class CheckApkUpdateThread extends Thread{
+
+		@Override
+		public void run() {
+			
+			super.run();
+			
+			String rtn = CommUtil.checkApkUpdate();
+		}
+		
+	}
+	
+	private static class MyHandler extends Handler{
+
+		@Override
+		public void handleMessage(Message msg) {
+			
+			super.handleMessage(msg);
+			
+			switch(msg.what){
+			
+			}
+		}
+		
+	}
+	
 	private static class ViewHolderItem{
 		TextView 	name_view;
 	}
@@ -169,36 +209,14 @@ public class MainActivity extends FragmentActivity {
 				
 				for(int ii = 0; ii < data.size(); ii++){
 					
-					String strTemp = data.get(ii);
-					String[] split_arr = strTemp.split("_");
+					String db_name 			= data.get(ii);
+					String	db_zhcn_name 	= CommUtil.getDBZhCNName(db_name);
 					
-					if(split_arr.length != 4){
+					if(null == db_zhcn_name || db_zhcn_name.length() < 1){
 						continue;
 					}
 					
-					StringBuffer sb = new StringBuffer();
-					sb.append(split_arr[0]);
-					sb.append("年");
-					
-					if("1".equalsIgnoreCase(split_arr[1] )){
-						sb.append("上半年");
-					}else if("2".equalsIgnoreCase(split_arr[1])){
-						sb.append("下半年");
-					}else{
-						continue;
-					}
-					
-					if("sw.db".equalsIgnoreCase(split_arr[3])){
-						sb.append("上午");
-					}else if("xw.db".equalsIgnoreCase(split_arr[3])){
-						sb.append("下午");
-					}else{
-						continue;
-					}
-					
-					sb.append("试题分析与解答");
-					
-					mData.add(sb.toString());
+					mData.add(db_zhcn_name);
 				}
 			}
 			
