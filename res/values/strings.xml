@@ -10,7 +10,13 @@
 	<string name="answer_detail_title">试题分析与解答</string>
 	<string name="no_answer">"暂无"</string>
 	<string name="ico_exam_bank_manager">&#xe137;</string>
+	<string name="ico_check_new_version">&#xe027;</string>
 	<string name="copyright_welcome"> &#169; 2014 DouziApp.com </string>
 	<string name="reserved">All Rights Reserved</string>
 	<string name="full_name_ext">试题分析与解答</string>
+	<string name="rookie_guide_left">左侧滑动选择题目</string>
+	<string name="rookie_guide_right">左侧滑动查看答案详解</string>
+	
+	<string name="exam_manager">题库管理</string>
+	<string name="check_new_version">检测更新</string>
 </resources>

@@ -16,4 +16,6 @@
     <color name="pressed_color">#FBB732</color>
     <color name="gray">#DDDDDD</color>
     <color name="gray2">#EEEEEE</color>
+    <color name="exam_rookie_guide_bg">#b0000000</color>
+    <color name="main_about_bg">#b0000000</color>
 </resources>

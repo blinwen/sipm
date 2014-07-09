@@ -18,6 +18,7 @@ import com.douziapp.exam.slidingmenu.RightFragment;
 import com.douziapp.exam.slidingmenu.SlidingMenu;
 import com.douziapp.exam.slidingmenu.ViewPageFragment;
 import com.douziapp.exam.util.CommDBUtil;
+import com.douziapp.exam.util.CommUI;
 
 import android.annotation.SuppressLint;
 import android.app.ActionBar.LayoutParams;
@@ -55,8 +56,6 @@ public class ExamActivity extends FragmentActivity {
 	int type_rd_select_state = 2;
 	int type_item_root_view = 3;
 
-	
-	
 	List<SingleChoice> mListSc;
 	
 	SlidingMenu 		mSlidingMenu;
@@ -64,8 +63,9 @@ public class ExamActivity extends FragmentActivity {
 	RightFragment 		rightFragment;
 	ViewPageFragment 	viewPageFragment;
 	
-	ImageButton			mTopLeftBtn;
+	Button				mTopLeftBtn;
 	ImageButton			mTopRightBtn;
+	TextView			mTopTitle;
 	
 	GridView			mGridSelExamItem;
 	
@@ -126,6 +126,7 @@ public class ExamActivity extends FragmentActivity {
 		initView();
 		
 		initContent();
+
 	}
 	
 	private void pre_intent_data(){
@@ -300,6 +301,8 @@ public class ExamActivity extends FragmentActivity {
 		};
 		
 		strContetn = transImage(strContetn);
+		
+		strContetn = strContetn.replaceAll("\r\n", "<br />");
 		
 		Spanned sp = Html.fromHtml(strContetn, imageGetter, null);
 		
@@ -515,20 +518,21 @@ public class ExamActivity extends FragmentActivity {
 	
 	private void initView(){
 		
-		mTopLeftBtn = (ImageButton)findViewById(R.id.ivTitleBtnLeft);
-		mTopRightBtn = (ImageButton)findViewById(R.id.ivTitleBtnRigh);
+		mTopLeftBtn 		= (Button)findViewById(R.id.ivTitleBtnLeft);
+		mTopRightBtn 		= (ImageButton)findViewById(R.id.ivTitleBtnRigh);
+		mTopTitle			= (TextView)findViewById(R.id.ivTitleName);
 		
-		mGridSelExamItem = (GridView)findViewById(R.id.grid_sel_exam_item);
+		mGridSelExamItem 	= (GridView)findViewById(R.id.grid_sel_exam_item);
 		
-		mContentRoot	= (LinearLayout)findViewById(R.id.content_root);
+		mContentRoot		= (LinearLayout)findViewById(R.id.content_root);
 		
-		mBtnNexItem		= (Button)findViewById(R.id.btn_next_exam_item);
-		mBtnAnswer		= (Button)findViewById(R.id.btn_item_answer);
+		mBtnNexItem			= (Button)findViewById(R.id.btn_next_exam_item);
+		mBtnAnswer			= (Button)findViewById(R.id.btn_item_answer);
 		
-		mAnswerDetail	= (TextView)findViewById(R.id.answer_detail);
-		mRightViewRoot	= findViewById(R.id.right_view_root);
+		mAnswerDetail		= (TextView)findViewById(R.id.answer_detail);
+		mRightViewRoot		= findViewById(R.id.right_view_root);
 		
-		mGridAdapter 	= new SelExamItemAdapter(mListSc,this);
+		mGridAdapter 		= new SelExamItemAdapter(mListSc,this);
 		mGridSelExamItem.setAdapter(mGridAdapter);
 		
 		ViewGroup.LayoutParams lp = mRightViewRoot.getLayoutParams();
@@ -565,7 +569,18 @@ public class ExamActivity extends FragmentActivity {
 			@Override
 			public void onClick(View v) {
 
-				showLeft();
+				//showLeft();
+				finish();
+			}
+		});
+		
+		mTopTitle.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				
+				finish();
+				
 			}
 		});
 		
@@ -795,5 +810,13 @@ public class ExamActivity extends FragmentActivity {
 			return view;
 		}
 		
+	}
+
+	@Override
+	public void onWindowFocusChanged(boolean hasFocus) {
+		
+		super.onWindowFocusChanged(hasFocus);
+		
+		CommUI.showExamGuide(this, mContentRoot);
 	}
 }

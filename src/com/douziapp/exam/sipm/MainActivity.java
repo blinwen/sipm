@@ -1,7 +1,7 @@
 package com.douziapp.exam.sipm;
 
 import java.io.File;
-import java.io.IOException;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,8 +12,10 @@ import com.douziapp.exam.slidingmenu.ViewPageFragment;
 import com.douziapp.exam.util.CommDBUtil;
 import com.douziapp.exam.util.CommUtil;
 
-import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -38,12 +40,15 @@ public class MainActivity extends FragmentActivity {
 	ViewPageFragment 	centerFragment;
 	
 	TextView			mImgExamBankManager;
+	TextView			mImgCheckNewVersion;
 	
 	ListView			mExamIndex;
 	ExamIndexAdapter	mExamIndexAdapter;
 	List<String>		mExamData			= new ArrayList<String>();
 	
 	Handler				mHandler			= null;
+	
+	static	String		mVersionUrl			= "http://exam.douziapp.com/version";
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -65,11 +70,14 @@ public class MainActivity extends FragmentActivity {
 		super.onStart();
 		
 		mImgExamBankManager = (TextView)findViewById(R.id.ico_exam_bank_manager);
+		mImgCheckNewVersion = (TextView)findViewById(R.id.ico_check_new_version);
 		
 		Typeface font = Typeface.createFromAsset(getAssets(), "font/glyphicons.ttf");
 		mImgExamBankManager.setTypeface(font);
+		mImgCheckNewVersion.setTypeface(font);
 		
 		mImgExamBankManager.setText(getString(R.string.ico_exam_bank_manager));
+		mImgCheckNewVersion.setText(getString(R.string.ico_check_new_version));
 		
 		mExamIndex = (ListView)findViewById(R.id.main_exam_index_view);
 
@@ -120,6 +128,8 @@ public class MainActivity extends FragmentActivity {
 	private void init(){
 		
 		mHandler = new MyHandler();
+		
+		new CheckApkUpdateThread().start();
 	}
 	
 	private void initData(){
@@ -170,12 +180,25 @@ public class MainActivity extends FragmentActivity {
 			
 			super.run();
 			
-			String rtn = CommUtil.checkApkUpdate();
+			String rtn = CommUtil.checkApkUpdate(MainActivity.this,mVersionUrl);
+			
+			if(null == rtn){
+				return;
+			}
+			
+			System.out.println(rtn);
+			
+			Message msg = Message.obtain();
+			
+			msg.what = 1;
+			msg.obj = rtn;
+			
+			mHandler.sendMessageDelayed(msg, 1000 * 2);
 		}
 		
 	}
 	
-	private static class MyHandler extends Handler{
+	private class MyHandler extends Handler{
 
 		@Override
 		public void handleMessage(Message msg) {
@@ -183,10 +206,40 @@ public class MainActivity extends FragmentActivity {
 			super.handleMessage(msg);
 			
 			switch(msg.what){
-			
+			case 1:
+				showMessageBox();
+				break;
 			}
 		}
 		
+	}
+	
+	private void showMessageBox(){
+		Dialog alertDialog = new AlertDialog.Builder(this). 
+                setTitle("新版本提示"). 
+                setMessage("有新版本,请问您是否需要升级？"). 
+                setIcon(R.drawable.ic_launcher). 
+                setNegativeButton("升级", new DialogInterface.OnClickListener() { 
+                	
+                    @Override 
+                    public void onClick(DialogInterface dialog, int which) { 
+                    	String	strUrl = "http://exam.douziapp.com/sipm.apk";
+                        CommUtil.downApkFromBrowser(MainActivity.this, strUrl);
+                    } 
+                }). 
+                setPositiveButton("取消", new DialogInterface.OnClickListener() { 
+                     
+                    @Override 
+                    public void onClick(DialogInterface dialog, int which) { 
+                        // TODO Auto-generated method stub  
+                    } 
+                }).
+                create(); 
+		
+		alertDialog.setCanceledOnTouchOutside(false);
+		
+        alertDialog.show(); 
+   
 	}
 	
 	private static class ViewHolderItem{

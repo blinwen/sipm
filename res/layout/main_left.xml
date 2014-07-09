@@ -28,11 +28,11 @@
                 android:textSize="23sp"
                 android:textColor="@android:color/black"
                 android:layout_marginTop="5sp"
-                android:layout_marginRight="20sp"/>
+                android:layout_marginRight="15sp"/>
             <TextView 
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="题库管理"
+                android:text="@string/exam_manager"
                 android:textSize="15sp"
                 android:layout_marginTop="4sp"
                 android:layout_marginRight="40sp"
@@ -40,10 +40,47 @@
                 android:id="@+id/text_exam_bank_manager"/>
         </LinearLayout>
         
-                <include
+		<include
             android:layout_width="fill_parent"
             android:layout_height="2dp"
             layout="@layout/line" >
         </include>
+        
+		<LinearLayout 
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="10sp"
+            android:paddingBottom="15sp"
+            android:background="@drawable/main_left_item_bg_selector"
+            android:gravity="center"
+            android:clickable="true"
+            android:orientation="horizontal">
+            
+            <TextView 
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:id="@+id/ico_check_new_version"
+                android:textSize="23sp"
+                android:textColor="@android:color/black"
+                android:layout_marginTop="5sp"
+                android:layout_marginRight="15sp"/>
+            <TextView 
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/check_new_version"
+                android:textSize="15sp"
+                android:layout_marginTop="4sp"
+                android:layout_marginRight="40sp"
+                android:textColor="@color/black"
+                android:id="@+id/text_check_new_version"/>
+        </LinearLayout>
+        
+        <include
+            android:layout_width="fill_parent"
+            android:layout_height="2dp"
+            layout="@layout/line" >
+        </include>
+        
+        		
 	</LinearLayout>
 </LinearLayout>

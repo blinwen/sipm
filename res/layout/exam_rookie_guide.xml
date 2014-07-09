@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical" 
-    android:background="@android:color/transparent">
+    android:background="@color/exam_rookie_guide_bg">
     
 	<LinearLayout 
 	    android:layout_width="match_parent"
@@ -23,7 +23,7 @@
 	        android:layout_height="wrap_content"
 	        android:drawableTop="@drawable/img_rookie_left"
 	        android:background="@android:color/transparent"
-	        android:text="左侧滑动选择题目"
+	        android:text="@string/rookie_guide_left"
 	        android:textColor="@color/white"/>
 	    
 	</LinearLayout>
@@ -39,16 +39,18 @@
 	        android:layout_height="wrap_content"
 	        android:drawableTop="@drawable/img_rookie_right"
 	        android:background="@android:color/transparent"
-	        android:text="右侧滑动查看题目详细解答"
+	        android:text="@string/rookie_guide_right"
 	        android:textColor="@color/white"/>
 	</LinearLayout>
 	<LinearLayout 
 	    android:layout_width="match_parent"
 	    android:layout_height="match_parent"
-	    android:layout_weight="50"></LinearLayout>
+	    android:layout_weight="50"
+	    android:background="@android:color/transparent"></LinearLayout>
 	
 	<LinearLayout 
 	    android:layout_width="match_parent"
 	    android:layout_height="match_parent"
-	    android:layout_weight="50"></LinearLayout>
+	    android:layout_weight="50"
+	    android:background="@android:color/transparent"></LinearLayout>
 </LinearLayout>

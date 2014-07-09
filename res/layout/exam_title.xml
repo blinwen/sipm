@@ -12,30 +12,33 @@
         android:background="@drawable/chat_title_bg_repeat"
         android:contentDescription="@string/app_name" />
 
+    <Button
+        android:id="@+id/ivTitleBtnLeft"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="0dip"
+        android:layout_centerVertical="true"
+        android:background="@drawable/foot_button_bg_selector"
+        android:drawableLeft="@drawable/btn_back_selector"
+        android:gravity="center"
+        android:includeFontPadding="false" 
+        android:text="@string/app_name"
+        android:textColor="@color/white"
+        android:contentDescription="@string/app_name" />
+    
     <TextView
         android:id="@+id/ivTitleName"
         android:layout_width="wrap_content"
         android:layout_height="fill_parent"
-        android:layout_centerInParent="true"
-        android:ellipsize="end"
         android:gravity="center"
-        android:paddingLeft="40.0dip"
-        android:paddingRight="40.0dip"
         android:singleLine="true"
-        android:text="@string/app_name" />
-
-    <ImageButton
-        android:id="@+id/ivTitleBtnLeft"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_marginLeft="5dip"
-        android:layout_centerVertical="true"
-        android:background="@drawable/btn_back_selector"
-        android:gravity="center"
-        android:includeFontPadding="false" 
-        android:contentDescription="@string/app_name" />
-
+        android:textColor="@android:color/white"
+        android:text="@string/app_name"
+        android:background="@drawable/foot_button_bg_selector"
+        android:layout_toRightOf="@id/ivTitleBtnLeft"
+        android:visibility="gone"/>
+    
     <ImageButton
         android:id="@+id/ivTitleBtnRigh"
         android:layout_width="wrap_content"
