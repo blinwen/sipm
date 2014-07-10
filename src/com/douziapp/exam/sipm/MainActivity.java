@@ -3,7 +3,6 @@ package com.douziapp.exam.sipm;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-
 import com.douziapp.exam.slidingmenu.LeftFragment;
 import com.douziapp.exam.slidingmenu.RightFragment;
 import com.douziapp.exam.slidingmenu.SlidingMenu;
@@ -11,7 +10,7 @@ import com.douziapp.exam.slidingmenu.ViewPageFragment;
 import com.douziapp.exam.util.CommDBUtil;
 import com.douziapp.exam.util.CommUI;
 import com.douziapp.exam.util.CommUtil;
-
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
@@ -49,13 +48,18 @@ public class MainActivity extends FragmentActivity {
 	View				mViewMainLeftBankManager;
 	View				mViewMainLeftCheckVersion;
 	
+	CheckApkUpdateThread	mCheckNewThread;
+	
 	ListView			mExamIndex;
 	ExamIndexAdapter	mExamIndexAdapter;
 	List<String>		mExamData			= new ArrayList<String>();
 	
 	Handler				mHandler			= null;
 	
-	static	String		mVersionUrl			= "http://exam.douziapp.com/version";
+	static 	final	String		mVersionUrl				= "http://exam.douziapp.com/version";
+	
+	static	final	int 		MSG_CHECK_NEW_VERSION 	= 1;
+	static	final	int			MSG_CHECK_TIME_OUT		= 2;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -147,6 +151,21 @@ public class MainActivity extends FragmentActivity {
 				mSlidingMenu.showLeftView();
 			}
 		});
+		
+		mViewMainLeftCheckVersion.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				
+				CommUtil.showProgressDlg(MainActivity.this, getString(R.string.wait));
+				
+				mCheckNewThread = new CheckApkUpdateThread(true);
+				
+				mCheckNewThread.start();
+							
+				mHandler.sendEmptyMessageDelayed(MSG_CHECK_TIME_OUT, 1000 * 10);
+			}
+		});
 	}
 
 	private void getExamDBData(){
@@ -172,7 +191,7 @@ public class MainActivity extends FragmentActivity {
 		
 		mHandler = new MyHandler();
 		
-		new CheckApkUpdateThread().start();
+		new CheckApkUpdateThread(false).start();
 	}
 	
 	private void initData(){
@@ -218,6 +237,18 @@ public class MainActivity extends FragmentActivity {
 	
 	private class CheckApkUpdateThread extends Thread{
 
+		boolean mIsClick;
+		boolean mNoShowMsgBox = false;
+		
+		CheckApkUpdateThread(boolean is_click){
+			
+			mIsClick = is_click;
+		}
+		
+		public void setNoShowMsgBox(){
+			mNoShowMsgBox = true;
+		}
+		
 		@Override
 		public void run() {
 			
@@ -225,22 +256,32 @@ public class MainActivity extends FragmentActivity {
 			
 			String rtn = CommUtil.checkApkUpdate(MainActivity.this,mVersionUrl);
 			
-			if(null == rtn){
+			String strAskVersion = CommUtil.getSPValue(MainActivity.this, "ask_version");
+			
+			CommUtil.setSPValue(MainActivity.this, "ask_version", rtn);
+			
+			if(mNoShowMsgBox){
+				
 				return;
 			}
 			
-			System.out.println(rtn);
+			if(!mIsClick){
+				if(rtn == null || strAskVersion.equalsIgnoreCase(rtn)){
+					return;
+				}
+			}
 			
 			Message msg = Message.obtain();
 			
-			msg.what = 1;
+			msg.what = MSG_CHECK_NEW_VERSION;
 			msg.obj = rtn;
 			
-			mHandler.sendMessageDelayed(msg, 1000 * 2);
+			mHandler.sendMessageDelayed(msg, 1000 * 1);
 		}
 		
 	}
 	
+
 	private class MyHandler extends Handler{
 
 		@Override
@@ -249,15 +290,51 @@ public class MainActivity extends FragmentActivity {
 			super.handleMessage(msg);
 			
 			switch(msg.what){
-			case 1:
-				showMessageBox();
+			case MSG_CHECK_NEW_VERSION:
+				CommUtil.hidenProgressDlg();
+				
+				if(null != msg.obj){
+					showUpdateMessageBox();
+				}else{
+					showIsNewMessageBox();
+				}
+				
+				break;
+			case MSG_CHECK_TIME_OUT:
+				CommUtil.hidenProgressDlg();
+				
+				if(null != mCheckNewThread){
+					
+					mCheckNewThread.setNoShowMsgBox();;
+					
+					showIsNewMessageBox();
+				}
 				break;
 			}
 		}
 		
 	}
 	
-	private void showMessageBox(){
+	private void showIsNewMessageBox(){
+		Dialog alertDialog = new AlertDialog.Builder(this). 
+                setTitle("提示"). 
+                setMessage("已经是最新版本!"). 
+                setIcon(R.drawable.ic_launcher). 
+                setPositiveButton("确定", new DialogInterface.OnClickListener() { 
+                     
+                    @Override 
+                    public void onClick(DialogInterface dialog, int which) { 
+                        
+                    } 
+                }).
+                create(); 
+		
+		alertDialog.setCanceledOnTouchOutside(false);
+		
+        alertDialog.show(); 
+	}
+	
+	private void showUpdateMessageBox(){
 		Dialog alertDialog = new AlertDialog.Builder(this). 
                 setTitle("新版本提示"). 
                 setMessage("有新版本,请问您是否需要升级？"). 
@@ -274,7 +351,7 @@ public class MainActivity extends FragmentActivity {
                      
                     @Override 
                     public void onClick(DialogInterface dialog, int which) { 
-                        // TODO Auto-generated method stub  
+                        
                     } 
                 }).
                 create(); 

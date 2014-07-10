@@ -21,16 +21,14 @@ import android.widget.TextView;
 public class CommUI {
 
 	static public void showExamGuide(Context context,View view){
+
+		boolean is_first = CommUtil.isFirstStart(context);
 		
-		SharedPreferences exam_info = context.getSharedPreferences("exam", 0);
-		boolean is_first = exam_info.getBoolean("is_first", true);
-		
-		if(is_first){
-			
-			exam_info.edit().putBoolean("is_first", false).commit();
-		}else{
+		if(!is_first){
 			return;
 		}
+		
+		CommUtil.setFirstStart(context, false);
 		
 		View contentView;
 		final PopupWindow popupWindow;

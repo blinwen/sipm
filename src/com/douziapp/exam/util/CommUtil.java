@@ -16,6 +16,7 @@ import com.douziapp.exam.sipm.R;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.net.Uri;
@@ -69,8 +70,12 @@ public class CommUtil {
 
 			URLConnection conn = url.openConnection();
 
+			conn.setUseCaches(false);
+			conn.setConnectTimeout(3000);
+			conn.setReadTimeout(3000);
+			
 			InputStream in = conn.getInputStream();
-
+		
 			// BufferedInputStream bin = new BufferedInputStream(in);
 			byte[] buffer = new byte[1024];
 			in.read(buffer, 0, 1024);
@@ -88,7 +93,7 @@ public class CommUtil {
 			
 		} catch (Exception e) {
 
-			// e.printStackTrace();
+			 e.printStackTrace();
 		}
 
 		return null;
@@ -146,5 +151,30 @@ public class CommUtil {
 			progressDlg.dismiss();
 			progressDlg = null;
 		}
+	}
+	
+	public static String	getSPValue(Context context,String strKey){
+		
+		SharedPreferences exam_info = context.getSharedPreferences("exam", 0);
+		
+		return exam_info.getString(strKey, "");
+	}
+	
+	public static void	setSPValue(Context context,String strKey,String strValue){
+		SharedPreferences exam_info = context.getSharedPreferences("exam", 0);
+		exam_info.edit().putString(strKey, strValue).commit();
+	}
+	
+	public static boolean	isFirstStart(Context context){
+		
+		SharedPreferences exam_info = context.getSharedPreferences("exam", 0);
+		return exam_info.getBoolean("is_first", true);
+		
+	}
+	
+	public static void setFirstStart(Context context,boolean isFirstStart){
+		
+		SharedPreferences exam_info = context.getSharedPreferences("exam", 0);
+		exam_info.edit().putBoolean("is_first", isFirstStart).commit();
 	}
 }

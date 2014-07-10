@@ -112,8 +112,8 @@ public class ExamBankManagerActivity extends Activity {
 			down_view.setTypeface(mFont);
 			down_view.setTextColor(Color.rgb(0x2f, 0x5f, 0x90));
 			
-			del_view.setText(getString(R.string.ico_check_new_version));
-			down_view.setText(getString(R.string.ico_check_new_version));
+			del_view.setText(getString(R.string.ico_del));
+			down_view.setText(getString(R.string.ico_download));
 			
 			return view;
 		}
