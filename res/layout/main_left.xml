@@ -19,7 +19,8 @@
             android:background="@drawable/main_left_item_bg_selector"
             android:gravity="center"
             android:clickable="true"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:id="@+id/main_left_bank_manager">
             
             <TextView 
                 android:layout_height="wrap_content"
@@ -54,7 +55,8 @@
             android:background="@drawable/main_left_item_bg_selector"
             android:gravity="center"
             android:clickable="true"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:id="@+id/main_left_check_version">
             
             <TextView 
                 android:layout_height="wrap_content"

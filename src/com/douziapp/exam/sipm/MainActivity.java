@@ -1,7 +1,6 @@
 package com.douziapp.exam.sipm;
 
 import java.io.File;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,6 +9,7 @@ import com.douziapp.exam.slidingmenu.RightFragment;
 import com.douziapp.exam.slidingmenu.SlidingMenu;
 import com.douziapp.exam.slidingmenu.ViewPageFragment;
 import com.douziapp.exam.util.CommDBUtil;
+import com.douziapp.exam.util.CommUI;
 import com.douziapp.exam.util.CommUtil;
 
 import android.app.AlertDialog;
@@ -25,10 +25,12 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -39,8 +41,13 @@ public class MainActivity extends FragmentActivity {
 	SlidingMenu 		mSlidingMenu;
 	ViewPageFragment 	centerFragment;
 	
+	ImageButton			mTopBtnLeft;
+	
 	TextView			mImgExamBankManager;
 	TextView			mImgCheckNewVersion;
+	
+	View				mViewMainLeftBankManager;
+	View				mViewMainLeftCheckVersion;
 	
 	ListView			mExamIndex;
 	ExamIndexAdapter	mExamIndexAdapter;
@@ -69,8 +76,13 @@ public class MainActivity extends FragmentActivity {
 		
 		super.onStart();
 		
+		mTopBtnLeft			= (ImageButton)findViewById(R.id.ivTitleBtnRight);
+		
 		mImgExamBankManager = (TextView)findViewById(R.id.ico_exam_bank_manager);
 		mImgCheckNewVersion = (TextView)findViewById(R.id.ico_check_new_version);
+		
+		mViewMainLeftBankManager	= findViewById(R.id.main_left_bank_manager);
+		mViewMainLeftCheckVersion	= findViewById(R.id.main_left_check_version);
 		
 		Typeface font = Typeface.createFromAsset(getAssets(), "font/glyphicons.ttf");
 		mImgExamBankManager.setTypeface(font);
@@ -103,7 +115,38 @@ public class MainActivity extends FragmentActivity {
 			}
 		});
 		
+		mViewMainLeftBankManager.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View arg0) {
+				
+				//new CommUI().showExamBankManager(MainActivity.this, mSlidingMenu);
+				Intent intent = new Intent(MainActivity.this,ExamBankManagerActivity.class);
+				
+				startActivity(intent);
+				
+				//mSlidingMenu.showLeftView();
+				
+			}
+		});
 		
+		mViewMainLeftCheckVersion.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View arg0) {
+				
+				
+			}
+		});
+		
+		mTopBtnLeft.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View arg0) {
+				
+				mSlidingMenu.showLeftView();
+			}
+		});
 	}
 
 	private void getExamDBData(){

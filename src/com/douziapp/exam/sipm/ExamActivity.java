@@ -519,7 +519,7 @@ public class ExamActivity extends FragmentActivity {
 	private void initView(){
 		
 		mTopLeftBtn 		= (Button)findViewById(R.id.ivTitleBtnLeft);
-		mTopRightBtn 		= (ImageButton)findViewById(R.id.ivTitleBtnRigh);
+		mTopRightBtn 		= (ImageButton)findViewById(R.id.ivTitleBtnRight);
 		mTopTitle			= (TextView)findViewById(R.id.ivTitleName);
 		
 		mGridSelExamItem 	= (GridView)findViewById(R.id.grid_sel_exam_item);

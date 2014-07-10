@@ -18,4 +18,5 @@
     <color name="gray2">#EEEEEE</color>
     <color name="exam_rookie_guide_bg">#b0000000</color>
     <color name="main_about_bg">#b0000000</color>
+    <color name="comm_bg">#b0000000</color>
 </resources>
