@@ -76,7 +76,7 @@ public class MainActivity extends FragmentActivity {
 		
 		super.onStart();
 		
-		mTopBtnLeft			= (ImageButton)findViewById(R.id.ivTitleBtnRight);
+		mTopBtnLeft			= (ImageButton)findViewById(R.id.ivTitleBtnLeft);
 		
 		mImgExamBankManager = (TextView)findViewById(R.id.ico_exam_bank_manager);
 		mImgCheckNewVersion = (TextView)findViewById(R.id.ico_check_new_version);
