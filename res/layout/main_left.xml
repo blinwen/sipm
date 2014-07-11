@@ -17,9 +17,10 @@
             android:paddingTop="20sp"
             android:paddingBottom="15sp"
             android:background="@drawable/main_left_item_bg_selector"
-            android:gravity="center"
+            android:gravity="center_vertical|left"
             android:clickable="true"
             android:orientation="horizontal"
+            android:paddingLeft="25sp"
             android:id="@+id/main_left_bank_manager">
             
             <TextView 
@@ -36,7 +37,6 @@
                 android:text="@string/exam_manager"
                 android:textSize="15sp"
                 android:layout_marginTop="4sp"
-                android:layout_marginRight="40sp"
                 android:textColor="@color/black"
                 android:id="@+id/text_exam_bank_manager"/>
         </LinearLayout>
@@ -53,9 +53,10 @@
             android:paddingTop="10sp"
             android:paddingBottom="15sp"
             android:background="@drawable/main_left_item_bg_selector"
-            android:gravity="center"
+            android:gravity="center_vertical|left"
             android:clickable="true"
             android:orientation="horizontal"
+            android:paddingLeft="25sp"
             android:id="@+id/main_left_check_version">
             
             <TextView 
@@ -72,9 +73,9 @@
                 android:text="@string/check_new_version"
                 android:textSize="15sp"
                 android:layout_marginTop="4sp"
-                android:layout_marginRight="40sp"
                 android:textColor="@color/black"
                 android:id="@+id/text_check_new_version"/>
+
         </LinearLayout>
         
         <include

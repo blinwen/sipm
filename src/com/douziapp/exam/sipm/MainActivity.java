@@ -3,6 +3,7 @@ package com.douziapp.exam.sipm;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+
 import com.douziapp.exam.slidingmenu.LeftFragment;
 import com.douziapp.exam.slidingmenu.RightFragment;
 import com.douziapp.exam.slidingmenu.SlidingMenu;
@@ -10,6 +11,7 @@ import com.douziapp.exam.slidingmenu.ViewPageFragment;
 import com.douziapp.exam.util.CommDBUtil;
 import com.douziapp.exam.util.CommUI;
 import com.douziapp.exam.util.CommUtil;
+
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -22,6 +24,8 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
+import android.text.Html;
+import android.text.Spanned;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -45,6 +49,8 @@ public class MainActivity extends FragmentActivity {
 	TextView			mImgExamBankManager;
 	TextView			mImgCheckNewVersion;
 	
+	TextView			mTextCheckNewVersion;
+	
 	View				mViewMainLeftBankManager;
 	View				mViewMainLeftCheckVersion;
 	
@@ -56,10 +62,12 @@ public class MainActivity extends FragmentActivity {
 	
 	Handler				mHandler			= null;
 	
-	static 	final	String		mVersionUrl				= "http://exam.douziapp.com/version";
+	static 	final	String		mVersionUrl				= "http://exam.douziapp.com/version/";
+	static	final	String		mNewApkUrl				= "http://exam.douziapp.com/apk/";
 	
-	static	final	int 		MSG_CHECK_NEW_VERSION 	= 1;
-	static	final	int			MSG_CHECK_TIME_OUT		= 2;
+	static	final	int 		MSG_CHECK_NEW_VERSION 		= 1;
+	static	final	int			MSG_CHECK_TIME_OUT			= 2;
+	static	final	int			MSG_UPDATE_VERSION_STATE	= 3;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -87,6 +95,8 @@ public class MainActivity extends FragmentActivity {
 		
 		mViewMainLeftBankManager	= findViewById(R.id.main_left_bank_manager);
 		mViewMainLeftCheckVersion	= findViewById(R.id.main_left_check_version);
+		
+		mTextCheckNewVersion		= (TextView)findViewById(R.id.text_check_new_version);
 		
 		Typeface font = Typeface.createFromAsset(getAssets(), "font/glyphicons.ttf");
 		mImgExamBankManager.setTypeface(font);
@@ -164,6 +174,7 @@ public class MainActivity extends FragmentActivity {
 				mCheckNewThread.start();
 							
 				mHandler.sendEmptyMessageDelayed(MSG_CHECK_TIME_OUT, 1000 * 10);
+
 			}
 		});
 	}
@@ -233,7 +244,22 @@ public class MainActivity extends FragmentActivity {
 		
 	}
 	
-	
+	private void update_check_new_state(boolean no_new){
+		
+		if (null == mTextCheckNewVersion) {
+			return;
+		}
+
+		Spanned sp = null;
+		String strTitle = getString(R.string.check_new_version);
+		if (!no_new && CommUtil.hasNewVersion(this)) {
+			strTitle += "<font color=\"red\">(new)</font>";
+		}
+
+		sp = Html.fromHtml(strTitle);
+
+		mTextCheckNewVersion.setText(sp);
+	}
 	
 	private class CheckApkUpdateThread extends Thread{
 
@@ -255,6 +281,9 @@ public class MainActivity extends FragmentActivity {
 			super.run();
 			
 			String rtn = CommUtil.checkApkUpdate(MainActivity.this,mVersionUrl);
+			
+			mHandler.removeMessages(MSG_CHECK_TIME_OUT);
+			mHandler.sendEmptyMessage(MSG_UPDATE_VERSION_STATE);
 			
 			String strAskVersion = CommUtil.getSPValue(MainActivity.this, "ask_version");
 			
@@ -291,6 +320,7 @@ public class MainActivity extends FragmentActivity {
 			
 			switch(msg.what){
 			case MSG_CHECK_NEW_VERSION:
+				
 				CommUtil.hidenProgressDlg();
 				
 				if(null != msg.obj){
@@ -303,12 +333,17 @@ public class MainActivity extends FragmentActivity {
 			case MSG_CHECK_TIME_OUT:
 				CommUtil.hidenProgressDlg();
 				
+				update_check_new_state(true);
+				
 				if(null != mCheckNewThread){
 					
 					mCheckNewThread.setNoShowMsgBox();;
 					
 					showIsNewMessageBox();
 				}
+				break;
+			case MSG_UPDATE_VERSION_STATE:
+				update_check_new_state(false);
 				break;
 			}
 		}

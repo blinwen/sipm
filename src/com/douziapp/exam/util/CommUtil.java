@@ -19,10 +19,13 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.content.pm.PackageManager.NameNotFoundException;
 import android.net.Uri;
 import android.os.Environment;
 
 public class CommUtil {
+	
+	public static final String STR_KEY_NEW_VERSION_CODE = "new_version_code";
 	
 	private static ProgressDialog progressDlg = null;
 	
@@ -65,7 +68,9 @@ public class CommUtil {
 			PackageInfo pi = pm.getPackageInfo(context.getPackageName(), 0);
 
 			cur_version_code = pi.versionCode;
-
+			
+			strUrl = strUrl + "?t=" + getAppSName(context);
+			
 			URL url = new URL(strUrl);
 
 			URLConnection conn = url.openConnection();
@@ -88,12 +93,13 @@ public class CommUtil {
 			new_version_code = version.getInt("versionCode");
 
 			if(new_version_code > cur_version_code){
+				setSPValue(context, STR_KEY_NEW_VERSION_CODE,Integer.toString(new_version_code));
 				return version.getString("versionName");
 			}
 			
 		} catch (Exception e) {
 
-			 e.printStackTrace();
+			//e.printStackTrace();
 		}
 
 		return null;
@@ -176,5 +182,68 @@ public class CommUtil {
 		
 		SharedPreferences exam_info = context.getSharedPreferences("exam", 0);
 		exam_info.edit().putBoolean("is_first", isFirstStart).commit();
+	}
+	
+	public static PackageInfo getPackageInfo(Context context){
+		
+		PackageManager		pm;
+		PackageInfo 		pi		= null;
+		
+		try {
+			pm = context.getPackageManager();
+			pi = pm.getPackageInfo(context.getPackageName(), 0);
+			
+			return pi;
+		} catch (NameNotFoundException e) {
+			
+			
+		}
+		
+		return pi;
+	}
+	
+	public static String	getAppSName(Context context){
+		
+		String strOut = "null";
+
+		PackageInfo pi;
+
+		pi = getPackageInfo(context);
+		
+		if(null != pi){
+			
+			String[] temp_arr = pi.packageName.split("\\.");
+
+			strOut = temp_arr[temp_arr.length - 1];
+		}
+
+
+
+		return strOut;
+	}
+	
+	public static boolean	hasNewVersion(Context context){
+		
+		String strValue = getSPValue(context, STR_KEY_NEW_VERSION_CODE);
+		
+		if(null == strValue || strValue.length() < 1){
+			return false;
+		}
+		
+		PackageInfo pi;
+
+		pi = getPackageInfo(context);
+		
+		if(null == pi){
+			return false;
+		}
+		
+		int new_version = Integer.parseInt(strValue);
+		
+		if(new_version > pi.versionCode){
+			return true;
+		}else{
+			return false;
+		}
 	}
 }
