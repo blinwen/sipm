@@ -135,9 +135,9 @@ public class ExamActivity extends FragmentActivity {
 			
 		mDBName = intent.getStringExtra("db");
 		
-		if(mDBName.endsWith("sw.db")){
+		if(mDBName.endsWith("sw")){
 			mMode = "sw";
-		}else if(mDBName.endsWith("xw.db")){
+		}else if(mDBName.endsWith("xw")){
 			mMode = "xw";
 		}else{
 			mMode = "";

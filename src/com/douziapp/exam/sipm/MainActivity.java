@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.douziapp.exam.data.BankItem;
 import com.douziapp.exam.slidingmenu.LeftFragment;
 import com.douziapp.exam.slidingmenu.RightFragment;
 import com.douziapp.exam.slidingmenu.SlidingMenu;
@@ -62,8 +63,7 @@ public class MainActivity extends FragmentActivity {
 	
 	Handler				mHandler			= null;
 	
-	static 	final	String		mVersionUrl				= "http://exam.douziapp.com/version/";
-	static	final	String		mNewApkUrl				= "http://exam.douziapp.com/apk/";
+
 	
 	static	final	int 		MSG_CHECK_NEW_VERSION 		= 1;
 	static	final	int			MSG_CHECK_TIME_OUT			= 2;
@@ -181,20 +181,18 @@ public class MainActivity extends FragmentActivity {
 
 	private void getExamDBData(){
 		try {
-			String strDataPath = CommDBUtil.getDBPath(this);
-			String[] list_file = new File(strDataPath).list();
 			
-			if(null == list_file){
-				return;
-			}
+			mExamData.clear();
 			
-			for (String string : list_file) {
-				mExamData.add(string);
+			List<BankItem> items = CommUtil.getLocalBankItems(this, false);
+			
+			for (BankItem item : items) {
+				mExamData.add(item.getName());
 			}
 			
 		} catch (Exception e) {
 			
-			e.printStackTrace();
+			//e.printStackTrace();
 		}
 	}
 	
@@ -203,6 +201,26 @@ public class MainActivity extends FragmentActivity {
 		mHandler = new MyHandler();
 		
 		new CheckApkUpdateThread(false).start();
+		
+		update_check_new_state(false);
+		
+		checkBank();
+	}
+	
+	private void checkBank(){
+		
+		new Thread(){
+
+			@Override
+			public void run() {
+				
+				super.run();
+				
+				CommUtil.getBankLastFromServer(MainActivity.this);
+			}
+			
+			
+		}.start();
 	}
 	
 	private void initData(){
@@ -280,7 +298,7 @@ public class MainActivity extends FragmentActivity {
 			
 			super.run();
 			
-			String rtn = CommUtil.checkApkUpdate(MainActivity.this,mVersionUrl);
+			String rtn = CommUtil.checkApkUpdate(MainActivity.this);
 			
 			mHandler.removeMessages(MSG_CHECK_TIME_OUT);
 			mHandler.sendEmptyMessage(MSG_UPDATE_VERSION_STATE);
@@ -418,7 +436,7 @@ public class MainActivity extends FragmentActivity {
 				for(int ii = 0; ii < data.size(); ii++){
 					
 					String db_name 			= data.get(ii);
-					String	db_zhcn_name 	= CommUtil.getDBZhCNName(db_name);
+					String	db_zhcn_name 	= CommUtil.getDBZhCNName(db_name,true);
 					
 					if(null == db_zhcn_name || db_zhcn_name.length() < 1){
 						continue;

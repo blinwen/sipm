@@ -20,6 +20,7 @@
             android:paddingRight="15sp"
             android:gravity="center"
             android:clickable="true"
+            android:id="@+id/root_del"
             android:background="@drawable/comm_click_bg_selector">
             <TextView 
                 android:layout_width="wrap_content"
@@ -44,6 +45,7 @@
             android:paddingRight="15sp"
             android:gravity="center"
             android:clickable="true"
+            android:id="@+id/root_download"
             android:background="@drawable/comm_click_bg_selector">
             <TextView 
                 android:layout_width="wrap_content"

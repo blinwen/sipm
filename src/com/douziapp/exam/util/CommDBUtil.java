@@ -47,7 +47,7 @@ public class CommDBUtil {
 			
 		} catch (Exception e) {
 			
-			e.printStackTrace();
+			//e.printStackTrace();
 		}
 	}
 	
@@ -64,6 +64,32 @@ public class CommDBUtil {
 		sb.append(".db");
 		
 		return sb.toString();
+	}
+	
+	public int	getDBVersion(boolean auto_close){
+		
+		int		outData = 0;
+		
+		if(null == mDB || !mDB.isOpen()){
+			return outData;
+		}
+		
+		String	strSQL = "select v.v from version v";
+		
+		Cursor cursor = mDB.rawQuery(strSQL, null);
+	
+		if(cursor.moveToNext()){
+			
+			outData = cursor.getInt(0);
+		}
+		
+		cursor.close();
+		
+		if(auto_close){
+			mDB.close();
+		}
+		
+		return outData;
 	}
 	
 	public List<SingleChoice>	getAllSingleChoice(boolean auto_close){
@@ -186,7 +212,10 @@ public class CommDBUtil {
 		return out;
 	}
 	public String t(String s,String k){
-				
+		
+
+		
+		
 		return s;
 	}
 	
@@ -197,6 +226,9 @@ public class CommDBUtil {
 	
 	public static String	getDBFullFile(Context context,String file){
 		
+		if(!file.endsWith(".db")){
+			file = file + ".db";
+		}
 		return getDBPath(context) + file;
 	}
 	
@@ -264,4 +296,27 @@ public class CommDBUtil {
         }  
         return true;  
     }  
+	
+	public static void deleteDb(Context context,String strDbName){
+		
+		String strFile = getDBFullFile(context, strDbName);
+		new File(strFile).delete();
+	}
+	
+	public static boolean downloadDb(Context context,String strDbName){
+		
+		StringBuffer	sb = new StringBuffer();
+		sb.append(CommUtil.STR_URL_BANK);
+		sb.append(CommUtil.getAppSName(context));
+		sb.append("/");
+		sb.append(strDbName);
+		sb.append(".db");
+		
+		String	strUrl 			= sb.toString();
+		String strSaveFile 		= getDBFullFile(context, strDbName);
+		
+		return CommUtil.saveNetFile(strUrl, strSaveFile);
+		
+		
+	}
 }

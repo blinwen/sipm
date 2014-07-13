@@ -11,14 +11,22 @@
 	    android:id="@+id/main_bank_manager_item_root"
 	    android:orientation="horizontal"
 	    android:background="@android:color/transparent"
-	    android:gravity="center"
-	    android:layout_gravity="center">
+	    android:gravity="center_vertical|left">
 	    <TextView 
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
 	        android:id="@+id/exam_item_title"
 	        android:layout_gravity="center"
 	        android:text="@string/app_name"
-	        android:textColor="@color/black"/>
+	        android:textColor="@color/black"
+	        android:paddingLeft="64sp"/>
+	    
+	    <TextView 
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:id="@+id/exam_item_state"
+	        android:textColor="@color/red"
+	        android:textSize="12sp"
+	        android:visibility="invisible"/>
 	</LinearLayout>
 </LinearLayout>
