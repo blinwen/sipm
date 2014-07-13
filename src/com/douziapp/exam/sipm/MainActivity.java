@@ -107,9 +107,6 @@ public class MainActivity extends FragmentActivity {
 		
 		mExamIndex = (ListView)findViewById(R.id.main_exam_index_view);
 
-		mExamIndexAdapter = new ExamIndexAdapter(this,mExamData);
-		mExamIndex.setAdapter(mExamIndexAdapter);
-		
 		mExamIndex.setOnItemClickListener(new OnItemClickListener() {
 
 			@Override
@@ -227,7 +224,21 @@ public class MainActivity extends FragmentActivity {
 		
 		CommDBUtil.checkDB(this);
 		
+		
+	}
+	
+	private void initList(){
+		
 		getExamDBData();
+		
+		if(null == mExamIndexAdapter){
+			mExamIndexAdapter = new ExamIndexAdapter(this,mExamData);
+			mExamIndex.setAdapter(mExamIndexAdapter);
+		}else{
+			mExamIndexAdapter.setData(mExamData);
+		}
+		
+		mExamIndexAdapter.notifyDataSetChanged();
 	}
 	
 	private void initSlidingMenu() {
@@ -396,7 +407,7 @@ public class MainActivity extends FragmentActivity {
                 	
                     @Override 
                     public void onClick(DialogInterface dialog, int which) { 
-                    	String	strUrl = "http://exam.douziapp.com/sipm.apk";
+                    	String	strUrl = CommUtil.genDownApkUrl(MainActivity.this);
                         CommUtil.downApkFromBrowser(MainActivity.this, strUrl);
                     } 
                 }). 
@@ -429,6 +440,12 @@ public class MainActivity extends FragmentActivity {
 		public ExamIndexAdapter(Context context,List<String> data){
 			
 			this.mContext = context;
+
+			setData(data);
+		}
+		
+		public void setData(List<String>	data){
+			
 			mData = new ArrayList<String>();
 			
 			if(null != data ){
@@ -445,10 +462,8 @@ public class MainActivity extends FragmentActivity {
 					mData.add(db_zhcn_name);
 				}
 			}
-			
-			
-			
 		}
+		
 		
 		@Override
 		public int getCount() {
@@ -495,5 +510,13 @@ public class MainActivity extends FragmentActivity {
 			return convertView;
 		}
 		
+	}
+
+	@Override
+	protected void onResume() {
+		
+		initList();
+		
+		super.onResume();
 	}
 }

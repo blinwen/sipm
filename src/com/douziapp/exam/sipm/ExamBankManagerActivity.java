@@ -1,7 +1,14 @@
 package com.douziapp.exam.sipm;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
+
+
+
+
 
 
 
@@ -90,6 +97,15 @@ public class ExamBankManagerActivity extends Activity {
 			
 			item.setCnName(strCnName);
 		}
+		
+		Collections.sort(mItems, new Comparator<BankItem>() {
+
+			@Override
+			public int compare(BankItem lhs, BankItem rhs) {
+				
+				return  lhs.getName().compareTo(rhs.getName());
+			}
+		});
 		
 		mListview = (ExpandableListView) findViewById(R.id.exam_bank_listview);
 		
@@ -321,9 +337,11 @@ public class ExamBankManagerActivity extends Activity {
 				title.setTextColor(Color.rgb(0xc0, 0xc0, 0xc0));
 			}
 			
+			String	strSize = CommUtil.getStrSize(item.getSizeNet());
+			
 			if(item.getVersionLocal() < item.getVersionNet()){
 				state.setVisibility(View.VISIBLE);
-				state.setText("(new)");
+				state.setText("(new)【"+strSize+"】");
 			}
 			
 			return view;

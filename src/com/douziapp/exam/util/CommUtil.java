@@ -11,6 +11,7 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -60,6 +61,14 @@ public class CommUtil {
 		intent.setData(uri);
 		
 		context.startActivity(intent);
+	}
+	
+	public static String genDownApkUrl(Context context){
+		String	strName = getAppSName(context);
+		
+		String	strUrl = STR_URL_APK + strName + ".apk";
+		
+		return strUrl;
 	}
 	
 	public static void showMessage(Context context,String strMsg){
@@ -139,7 +148,7 @@ public class CommUtil {
 
 		} catch (Exception e) {
 			
-			e.printStackTrace();
+			//e.printStackTrace();
 		}
 
 		return fileData;
@@ -175,12 +184,9 @@ public class CommUtil {
 			in.close();
 			outStream.close();
 			
-		} catch (MalformedURLException e) {
-			
-			//e.printStackTrace();
 		} catch (Exception e) {
 			
-			e.printStackTrace();
+			//e.printStackTrace();
 		}
 		
 		return strOut;
@@ -530,5 +536,25 @@ public class CommUtil {
 		
 		return outData;
 	}
-	
+
+	public static String	getStrSize(int ksize){
+		
+		int		isize 	= ksize;
+		double	dsize	= 0.0;
+		String	ssize;
+		
+		DecimalFormat df = new DecimalFormat("#.##");
+		
+
+        
+		if(isize > 1024 * 1024){
+			dsize = isize / (1024.0 * 1024);
+			ssize = df.format(dsize) + "M";
+		}else{
+			dsize = isize / 1024.0;
+			ssize = df.format(dsize) + "K";
+		}
+		
+		return ssize;
+	}
 }

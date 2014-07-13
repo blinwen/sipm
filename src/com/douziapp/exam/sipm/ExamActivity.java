@@ -19,6 +19,7 @@ import com.douziapp.exam.slidingmenu.SlidingMenu;
 import com.douziapp.exam.slidingmenu.ViewPageFragment;
 import com.douziapp.exam.util.CommDBUtil;
 import com.douziapp.exam.util.CommUI;
+import com.douziapp.exam.util.CommUtil;
 
 import android.annotation.SuppressLint;
 import android.app.ActionBar.LayoutParams;
@@ -78,6 +79,8 @@ public class ExamActivity extends FragmentActivity {
 	
 	TextView			mAnswerDetail	= null;
 	View				mRightViewRoot	= null;
+	
+	TextView			mLeftExamTile	= null;
 	
 	long				mCurItemIndex 	= 1;
 	
@@ -319,6 +322,12 @@ public class ExamActivity extends FragmentActivity {
 			return;
 		}
 		
+		//left title
+		String	strLeftExamTitle = CommUtil.getDBZhCNName(mDBName, false);
+		if(null != strLeftExamTitle){
+			mLeftExamTile.setText(strLeftExamTitle);
+		}
+		
 		SingleChoice sc = mListSc.get((int)mCurItemIndex - 1);
 		
 		String	strContent = sc.getvContent();
@@ -521,6 +530,8 @@ public class ExamActivity extends FragmentActivity {
 		mTopLeftBtn 		= (Button)findViewById(R.id.ivTitleBtnLeft);
 		mTopRightBtn 		= (ImageButton)findViewById(R.id.ivTitleBtnRight);
 		mTopTitle			= (TextView)findViewById(R.id.ivTitleName);
+		
+		mLeftExamTile		= (TextView)findViewById(R.id.exam_left_title);
 		
 		mGridSelExamItem 	= (GridView)findViewById(R.id.grid_sel_exam_item);
 		

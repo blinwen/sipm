@@ -18,14 +18,11 @@
             android:gravity="center">
 
             <TextView
-                android:id="@+id/name_textview"
+                android:id="@+id/exam_left_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
                 android:layout_marginBottom="2dp"
                 android:layout_marginTop="4dp"
-                android:layout_toRightOf="@+id/head_view"
-                android:text="2014年下半上午试题"
                 android:textColor="@color/black"
                 android:textSize="15sp" />
 
