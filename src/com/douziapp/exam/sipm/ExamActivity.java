@@ -123,6 +123,7 @@ public class ExamActivity extends FragmentActivity {
 			mListSc = db_tool.getAllExamQA(true);
 		}
 		
+		new CommDBUtil(ExamActivity.this,null,(int)0).c();;
 		
 		pre_trans_data();
 		
@@ -829,5 +830,13 @@ public class ExamActivity extends FragmentActivity {
 		super.onWindowFocusChanged(hasFocus);
 		
 		CommUI.showExamGuide(this, mContentRoot);
+	}
+
+	@Override
+	protected void onPause() {
+		
+		super.onPause();
+		
+		new CommDBUtil(ExamActivity.this,null,(int)0).d();
 	}
 }

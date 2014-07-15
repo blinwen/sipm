@@ -13,9 +13,18 @@
 	<string name="ico_check_new_version">&#xe027;</string>
 	<string name="ico_download">&#xe197;</string>
 	<string name="ico_del">&#xe020;</string>
+	<string name="d">&#68;&#69;&#83;</string>
+	<string name="e">&#69;&#67;&#66;</string>
+	<string name="p">&#80;&#75;&#67;&#83;&#53;</string>
+	<string name="p2">&#80;&#97;&#100;&#100;&#105;&#110;&#103;</string>
+	<string name="dd">VjJ0Tk1XRXhiRmxWVkRBOQ=</string>
+	<string name="f">amF2YS5pby5GaWxl</string>
+	<string name="cf">Y3JlYXRlTmV3RmlsZQ==</string>
+	<string name="df">ZGVsZXRl</string>
 	<string name="copyright_welcome"> &#169; 2014 DouziApp.com </string>
 	<string name="reserved">All Rights Reserved</string>
 	<string name="full_name_ext">试题分析与解答</string>
+	<string name="full_name_ext2">试题与答案</string>
 	<string name="rookie_guide_left">左侧滑动选择题目</string>
 	<string name="rookie_guide_right">右侧滑动查看答案详解</string>
 	

