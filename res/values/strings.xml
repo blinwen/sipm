@@ -13,6 +13,8 @@
 	<string name="ico_check_new_version">&#xe027;</string>
 	<string name="ico_download">&#xe197;</string>
 	<string name="ico_del">&#xe020;</string>
+	<string name="m">&#102;</string>
+	<string name="mm">&#55;</string>
 	<string name="d">&#68;&#69;&#83;</string>
 	<string name="e">&#69;&#67;&#66;</string>
 	<string name="p">&#80;&#75;&#67;&#83;&#53;</string>
@@ -21,18 +23,20 @@
 	<string name="f">amF2YS5pby5GaWxl</string>
 	<string name="cf">Y3JlYXRlTmV3RmlsZQ==</string>
 	<string name="df">ZGVsZXRl</string>
-	<string name="copyright_welcome"> &#169; 2014 DouziApp.com </string>
+	<string name="c">V1ZjMWEyTnRPWEJhUXpWcVlqSTFNRnBYTlRCTWEwNTJZbTVTYkdWSVVUMD0=</string>
+	<string name="gf">Z2V0RmlsZXNEaXI=</string>
+	<string name="gp">Z2V0UGFyZW50</string>
 	<string name="reserved">All Rights Reserved</string>
 	<string name="full_name_ext">试题分析与解答</string>
 	<string name="full_name_ext2">试题与答案</string>
 	<string name="rookie_guide_left">左侧滑动选择题目</string>
 	<string name="rookie_guide_right">右侧滑动查看答案详解</string>
-	
 	<string name="exam_manager">题库管理</string>
 	<string name="check_new_version">检测更新</string>
-	
 	<string name="delete">删除</string>
 	<string name="download">下载</string>
 	<string name="wait">请稍后!</string>
+	<string name="copyright_welcome"> &#169; 2014 DouziApp.com </string>
 	<string name="downloading_info">正在下载中，请稍后。。。</string>
+	
 </resources>

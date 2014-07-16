@@ -13,6 +13,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import com.douziapp.exam.data.SingleChoice;
+import com.douziapp.exam.jni.J;
 import com.douziapp.exam.slidingmenu.LeftFragment;
 import com.douziapp.exam.slidingmenu.RightFragment;
 import com.douziapp.exam.slidingmenu.SlidingMenu;
@@ -34,6 +35,7 @@ import android.text.Html;
 import android.text.Html.ImageGetter;
 import android.text.Spanned;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -96,6 +98,14 @@ public class ExamActivity extends FragmentActivity {
 	Map<Long,List<Long>>	mVCIndex		= new HashMap<Long,List<Long>>();
 	
 	@Override
+	protected void onResume() {
+		
+		new CommDBUtil(ExamActivity.this,null,(int)0).c();
+		
+		super.onResume();
+	}
+
+	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
@@ -108,6 +118,8 @@ public class ExamActivity extends FragmentActivity {
 		initSlidingMenu();
 		
 		initListener();
+		
+		new CommDBUtil(ExamActivity.this,null,(int)0).c();
 		
 		CommDBUtil db_tool = new CommDBUtil(this,mDBName, CommDBUtil.OPEN_READONLY);
 		
@@ -122,9 +134,7 @@ public class ExamActivity extends FragmentActivity {
 	protected void onStart() {
 		
 		super.onStart();
-			
-		new CommDBUtil(ExamActivity.this,null,(int)0).c();;
-		
+
 		pre_trans_data();
 		
 		initView();
