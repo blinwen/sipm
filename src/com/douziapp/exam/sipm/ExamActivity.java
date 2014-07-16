@@ -108,12 +108,6 @@ public class ExamActivity extends FragmentActivity {
 		initSlidingMenu();
 		
 		initListener();
-	}
-
-	@Override
-	protected void onStart() {
-		
-		super.onStart();
 		
 		CommDBUtil db_tool = new CommDBUtil(this,mDBName, CommDBUtil.OPEN_READONLY);
 		
@@ -122,7 +116,13 @@ public class ExamActivity extends FragmentActivity {
 		}else if(mMode.equalsIgnoreCase("xw")){
 			mListSc = db_tool.getAllExamQA(true);
 		}
+	}
+
+	@Override
+	protected void onStart() {
 		
+		super.onStart();
+			
 		new CommDBUtil(ExamActivity.this,null,(int)0).c();;
 		
 		pre_trans_data();

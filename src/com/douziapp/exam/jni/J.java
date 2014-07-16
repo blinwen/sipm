@@ -18,6 +18,8 @@ public class J {
 	
 	public static native String	h(String s,String j);
 	
+	public static native String	i(String s,String j);
+	
 	public static native String	j(String s,String j);
 	
 	public static native String	k(String s,String j);
